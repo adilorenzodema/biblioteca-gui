@@ -6,46 +6,52 @@ document.addEventListener('DOMContentLoaded', function() {
     const apiUrl = 'http://localhost:8080/api/libri/getAllLibri';
     
     fetch(apiUrl)
-        .then(response => { //gestisce la risposta HTTP 
-            //verifica che la risposta sia avvenuta correttante
+        .then(response => {
             if (!response.ok) {
-                console.log("AIUTO c'e un errore!!!!")
-                throw new Error('Errore nel recupero dei dati'); //solleva en'eccezione, mandando un messaggio di errore
-                
+                throw new Error('Errore nel recupero dei dati');
             }
-            console.log("AIUTO!!!!")
-            return response.json(); //restituisce la risposta in formato json
+            return response.json();
         })
-        //gestisce i libri ricevuti 
         .then(libri => {
-            console.log("AIUTO 2!!!!")
             loadingElement.style.display = 'none';
-            //controlla che ci siano libri nel catagolo
+            
             if (libri.length === 0) {
-                libriContainer.innerHTML = '<p>Nessun libro disponibile nel catalogo.</p>';
+                libriContainer.innerHTML = '<div class="col-12"><div class="alert alert-info">Nessun libro disponibile nel catalogo.</div></div>';
                 return;
-                console.log("AIUTO non ci sono libri!!!!")
             }
-            //per ogni libro inserisce le informazioni
+            
             libri.forEach(libro => {
-                console.log("AIUTO sto guardando i libri!!!!")
-                const libroCard = document.createElement('div');
-                libroCard.className = 'libro-card';
+                const col = document.createElement('div');
+                col.className = 'col';
                 
-                libroCard.innerHTML = `
-                    <h3>${libro.titolo}</h3>
-                    <p><strong>Autore:</strong> ${libro.autore}</p>
-                    <p><strong>Casa editrice:</strong> ${libro.casaEditrice}</p>
-                    <p><strong>Genere:</strong> ${libro.genere}</p>
-                    <p><strong>ISBN:</strong> ${libro.iban}</p>
-                    <p><strong>Disponibilita:</strong> ${libro.disponibilita}</p>
-                    ${libro.descrizione ? `<p>${libro.descrizione}</p>` : ''}
+                const copertinaUrl = libro.link;
+                
+                col.innerHTML = `
+                    <div class="card libro-card h-100">
+                        <img src="${copertinaUrl}" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">${libro.titolo}</h5>
+                            <p class="card-text"><strong>Autore:</strong> ${libro.autore}</p>
+                            <p class="card-text"><strong>Genere:</strong> ${libro.genere}</p>
+                            
+                            <ul class="list-group list-group-flush mt-3" style="display: none;">
+                                <li class="list-group-item"><strong>Editore:</strong> ${libro.casaEditrice}</li>
+                                <li class="list-group-item"><strong>ISBN:</strong> ${libro.iban}</li>
+                                <li class="list-group-item ${libro.disponibilita ? 'disponibile' : 'non-disponibile'}">
+                                    <strong>Disponibilità:</strong> ${libro.disponibilita ? 'Disponibile' : 'Non disponibile'}
+                                </li>
+                            </ul>
+                            
+                            <a class="toggle-details mt-2 d-block" onclick="toggleDetails(this)">
+                                <i class="fas fa-chevron-down"></i> Mostra dettagli
+                            </a>
+                        </div>
+                    </div>
                 `;
                 
-                libriContainer.appendChild(libroCard);
+                libriContainer.appendChild(col);
             });
         })
-        //gestisce gli errori
         .catch(error => {
             loadingElement.style.display = 'none';
             errorElement.textContent = `Si è verificato un errore: ${error.message}`;
@@ -53,3 +59,16 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Errore:', error);
         });
 });
+
+function toggleDetails(element) {
+    const detailsList = element.previousElementSibling;
+    const icon = element.querySelector('i');
+    
+    if (detailsList.style.display === 'none' || !detailsList.style.display) {
+        detailsList.style.display = 'block';
+        element.innerHTML = '<i class="fas fa-chevron-up"></i> Nascondi dettagli';
+    } else {
+        detailsList.style.display = 'none';
+        element.innerHTML = '<i class="fas fa-chevron-down"></i> Mostra dettagli';
+    }
+}
