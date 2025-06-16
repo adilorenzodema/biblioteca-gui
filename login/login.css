@@ -1,7 +1,11 @@
 #body{
+<<<<<<< HEAD
     font-family: 'Roboto', sans-serif;
     background-color:#f0f0f0;
 ;
+=======
+    background-color: #2c3e50;
+>>>>>>> c151535ca27960126840c350d961b974c5b55534
 }
 #login{
     padding-top: 20px;
@@ -20,9 +24,14 @@
     width: 100%;
 }
 #textlogin{
+    border-radius: 10px;
+    background-color: white;
     width: 25%;
     margin: auto;
-    border-color: black;
+    border-width: 1px;
+    border-style: solid;    
+    border-color: white;
+    padding: 10px;
 }
 #mainDiv{
     width: 100%;
@@ -41,4 +50,11 @@
 }
 #loginBtn{
     margin-top: 20px;
+    width: 100% ;
+    color:  #ffffff;
+    background-color: #000000;
+}
+
+#loginBtn:hover{
+    background-color: grey;
 }
