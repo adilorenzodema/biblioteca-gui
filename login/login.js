@@ -1,26 +1,29 @@
+const messaggioErrore=document.getElementById("messaggioErrore")
 const loginBtn = document.getElementById("loginBtn");
 
-  loginBtn.addEventListener("click", function(event) {
-    const email = document.getElementById("inputEmail").value;
+function doLogin() {
+    const username = document.getElementById("inputEmail").value;
     const password = document.getElementById("inputPassword").value;
-    console.log("Email:", email);
-    console.log("Password:", password);
 
-    fetch("http://localhost:8080/api/login/checkUser", {
+    fetch("http://localhost:8080/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ username, password })
     })
-    .then(data => {
-      console.log("Risposta server:", data);
-      if (data.loginSuccess) {
-        window.location.href = "/homePage/homepage.html";
-      } else {
-        alert("Email o password errati");
+    .then(dataJson => {
+      if(dataJson.status===200){
+      console.log("Risposta server:", dataJson);
+      window.location.href = "/homePage/homepage.html";
+      }
+      else if(dataJson.status===500){
+        messaggioErrore.innerHTML="credenziali sbagliate";
+      }
+      else{
+        messaggioErrore.innerHTML="errore sconosciuto";
       }
     })
     .catch(error => {
       console.error("Errore nella fetch:", error);
       alert("Errore nella comunicazione con il server");
     });
-  });
+};
