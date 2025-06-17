@@ -27,9 +27,9 @@ function doLogin() {
         utente: utenteLoggato,
         loginTime: timestampLogin
         };
-        sessionStorage.setItem("utente", JSON.stringify(utenteLoggato));
+        sessionStorage.setItem("utente", JSON.stringify(datiLogin));
         console.log("Utente salvato in sessionStorage:", utenteLoggato);
-        window.location.href = "/homePage/homepage.html";
+        window.location.href = "../homePage/homepage.html";
     })
     .catch(error => {
         console.error("Errore nella fetch:", error);
