@@ -56,3 +56,30 @@
             bottom: 0;
             width: 100%;
             }
+
+.logout-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 8px 16px;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.logout-btn:hover {
+    background-color:white;
+}
+
+#logoutContainer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+}
+#logoutButton {
+    background: red;
+}
