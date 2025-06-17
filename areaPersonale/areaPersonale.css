@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
@@ -10,6 +11,13 @@ body {
     padding: 1rem 0;
     text-align: center;
 }
+=======
+#body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+             background-color: #f8f9fa;
+            }
+>>>>>>> 33b1cb2f812e8df8a2d31390a62b5698fd50d669
 
 #nav {
     background-color: #34495e;
@@ -38,6 +46,7 @@ body {
 }
 
 #nav ul li a:hover {
+<<<<<<< HEAD
     background-color: #1abc9c;
 }
 
@@ -47,6 +56,13 @@ body {
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     overflow: hidden;
+=======
+            background-color: #1abc9c;
+        }
+.libro-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%;
+>>>>>>> 33b1cb2f812e8df8a2d31390a62b5698fd50d669
 }
 
 .libro-card:hover {
@@ -57,25 +73,89 @@ body {
 .card-img-top {
     height: 350px;
     object-fit: cover;
+<<<<<<< HEAD
     border-bottom: 1px solid #e0e0e0;
 }
 
 .card-body {
     padding: 1.25rem;
+=======
+>>>>>>> 33b1cb2f812e8df8a2d31390a62b5698fd50d669
 }
 
 .card-title {
     font-size: 1.25rem;
     margin-bottom: 0.75rem;
+<<<<<<< HEAD
     color: #2c3e50;
+=======
+>>>>>>> 33b1cb2f812e8df8a2d31390a62b5698fd50d669
 }
 
 .list-group-item {
     padding: 0.75rem 1.25rem;
+<<<<<<< HEAD
     border: none;
     border-top: 1px solid rgba(0,0,0,.125);
 }
 
 .list-group-item:first-child {
     border-top: none;
+=======
+}
+
+.disponibile {
+    color: #28a745;
+}
+
+.non-disponibile {
+    color: #dc3545;
+}
+
+.toggle-details {
+    cursor: pointer;
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+.toggle-details:hover {
+    text-decoration: underline;
+}
+
+.modal-libro {
+  display: none;
+  position: fixed;
+  z-index: 1050;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-libro.show {
+  display: flex;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  width: 95%;
+  max-width: 500px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+>>>>>>> 33b1cb2f812e8df8a2d31390a62b5698fd50d669
 }

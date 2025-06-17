@@ -24,7 +24,10 @@ function doLogin() {
     .then(utenteLoggato => {
         const loginTime = Date.now();
         const expiryTime = loginTime + 1 * 60 * 60 * 1000;
+<<<<<<< HEAD
         sessionStorage.setItem('idUtente', utenteLoggato.idUtente);
+=======
+>>>>>>> 33b1cb2f812e8df8a2d31390a62b5698fd50d669
         const datiLogin = {
         utente: utenteLoggato,
         loginTime: loginTime,
