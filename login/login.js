@@ -22,14 +22,17 @@ function doLogin() {
         return response.json();
     })
     .then(utenteLoggato => {
-       const timestampLogin = new Date().toISOString();
+        const loginTime = Date.now();
+        const expiryTime = loginTime + 1 * 60 * 60 * 1000;
+        sessionStorage.setItem('idUtente', utenteLoggato.idUtente);
         const datiLogin = {
         utente: utenteLoggato,
-        loginTime: timestampLogin
+        loginTime: loginTime,
+        expiryTime: expiryTime
         };
-        sessionStorage.setItem("utente", JSON.stringify(utenteLoggato));
+        sessionStorage.setItem("utente", JSON.stringify(datiLogin));
         console.log("Utente salvato in sessionStorage:", utenteLoggato);
-        window.location.href = "/homePage/homepage.html";
+        window.location.href = "../homePage/homepage.html";
     })
     .catch(error => {
         console.error("Errore nella fetch:", error);

@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const errorElement = document.getElementById('error');
 
     const apiUrl = 'http://localhost:8080/api/libri/getAllLibri';
+    const apiUrlPrestito='http://localhost:8080/api/libri/concedi';
 
     fetch(apiUrl)
         .then(response => {
@@ -38,9 +39,10 @@ document.addEventListener('DOMContentLoaded', function () {
             <ul class="list-group list-group-flush mt-3" style="display: none;">
                 <li class="list-group-item"><strong>Editore:</strong> ${libro.casaEditrice}</li>
                 <li class="list-group-item"><strong>ISBN:</strong> ${libro.iban}</li>
-                <li class="list-group-item ${libro.disponibilita ? 'disponibile' : 'non-disponibile'}">
-                    <strong>Disponibilità:</strong> ${libro.disponibilita ? 'Disponibile' : 'Non disponibile'}
+                <li class="list-group-item ${libro.disponibilita !== 0 ? 'disponibile' : 'non-disponibile'}">
+                    <strong>Disponibilità:</strong> ${libro.disponibilita !== 0 ? 'Disponibile' : 'Non disponibile'}
                 </li>
+
             </ul>
 
             <a href="#" class="toggle-details mt-2 d-block">
@@ -55,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="modal-content">
             <button class="close-modal-btn close" aria-label="Chiudi Modale">&times;</button>
             <h2 class="mb-3">Prenota il libro: <em>${libro.titolo}</em></h2>
-            <form class="form-prenotazione">
+            <form class="form-prenotazione" data-idlibro="${libro.idLibro}">
                 <div class="mb-2">
                     <label for="nome-${index}" class="form-label">Nome</label>
                     <input type="text" class="form-control" id="nome-${index}" required>
@@ -81,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 libriContainer.appendChild(col);
             });
 
-         
             libriContainer.querySelectorAll('.toggle-details').forEach(toggle => {
                 toggle.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -116,6 +117,56 @@ document.addEventListener('DOMContentLoaded', function () {
                     e.target.setAttribute('aria-hidden', 'true');
                 }
             });
+
+            libriContainer.addEventListener('submit', function (e) {
+    if (e.target.classList.contains('form-prenotazione')) {
+        e.preventDefault();
+
+        const form = e.target;
+        const idLibro = form.getAttribute('data-idlibro');
+        const index = form.closest('.modal-libro').getAttribute('data-index');
+        const idUtente = sessionStorage.getItem('idUtente');
+        if (!idUtente) {
+            alert('Utente non autenticato! Effettua il login.');
+            return;
+        }
+        const nome = form.querySelector(`#nome-${index}`).value.trim();
+        const cognome = form.querySelector(`#cognome-${index}`).value.trim();
+        const classe = form.querySelector(`#classe-${index}`).value.trim();
+        const codiceFiscale = form.querySelector(`#cf-${index}`).value.trim();
+
+        const prenotazione = {
+            idLibro: parseInt(idLibro),
+            idUtente: parseInt(idUtente),
+            nome,
+            cognome,
+            classe,
+            codiceFiscale
+        };
+
+        fetch(apiUrlPrestito, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(prenotazione)
+        })
+            .then(response => {
+                if (!response.ok) throw new Error('Non è stato possibile effettuare la prenotazione');
+                return response.text();
+            })
+            .then(data => {
+                alert('Prenotazione effettuata con successo!');
+                form.reset();
+                form.closest('.modal-libro').style.display = 'none';
+            })
+            .catch(error => {
+                console.error('Errore nella prenotazione:', error);
+                alert('Errore durante la prenotazione. Riprova più tardi.');
+            });
+    }
+});
+
         })
         .catch(error => {
             loadingElement.style.display = 'none';
