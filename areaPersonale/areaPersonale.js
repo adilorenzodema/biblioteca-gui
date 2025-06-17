@@ -1,6 +1,6 @@
 const container=document.getElementById("container");
 const mokLibri = [{
-    titolo: 'Harry Potte',
+    titolo: 'Harry Potter',
 
 
 
