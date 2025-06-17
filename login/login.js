@@ -22,10 +22,12 @@ function doLogin() {
         return response.json();
     })
     .then(utenteLoggato => {
-       const timestampLogin = new Date().toISOString();
+        const loginTime = Date.now();
+        const expiryTime = loginTime + 1 * 60 * 60 * 1000;
         const datiLogin = {
         utente: utenteLoggato,
-        loginTime: timestampLogin
+        loginTime: loginTime,
+        expiryTime: expiryTime
         };
         sessionStorage.setItem("utente", JSON.stringify(datiLogin));
         console.log("Utente salvato in sessionStorage:", utenteLoggato);

@@ -135,3 +135,14 @@ document.addEventListener('DOMContentLoaded', function () {
             : '<i class="fas fa-chevron-up"></i> Nascondi dettagli';
     }
 });
+function checkSession() {
+    const now = Date.now();
+    if (now > datiLogin.expiryTime) {
+        alert("Sessione scaduta, effettua di nuovo il login");
+        sessionStorage.removeItem("utente");
+        window.location.href = "/login/login.html";
+        return false;
+    }
+    return true;
+}
+checkSession();
