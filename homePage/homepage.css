@@ -65,7 +65,6 @@
     background-color: #ff4444;
     color: white;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
 }
@@ -82,4 +81,7 @@
 }
 #logoutButton {
     background: red;
+    border-radius: 10px ;
+    margin-top: 10px;
+    margin-right: 10px;
 }
