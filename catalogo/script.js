@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const errorElement = document.getElementById('error');
     const datiLoginString = sessionStorage.getItem("utente");
     const datiLogin = datiLoginString ? JSON.parse(datiLoginString) : null;
-    const ruolo = "admin";   //datiLogin.utente.ruolo
+    const ruolo = datiLogin.utente.nomeRuolo;   
     const apiUrl = 'http://localhost:8080/api/libri/getAllLibri';
     const apiUrlPrestito='http://localhost:8080/api/libri/concedi';
     const containerAggiungiLibro = document.getElementById('aggiungi-libro-container');
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </a>
 
            ${ruolo === "admin" || ruolo === "operatore" ? `
-    <button class="open-modal-btn btn btn-primary mt-3" data-index="${index}">Prenota</button>
+    <button class="open-modal-btn btn btn-primary mt-3" data-index="${index}">prestito</button>
 ` : ''}
 
             ${ruolo === "admin" || ruolo === "operatore" ? `
