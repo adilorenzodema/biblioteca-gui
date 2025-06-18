@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const libriContainer = document.getElementById('libri-container');
     const loadingElement = document.getElementById('loading');
     const errorElement = document.getElementById('error');
-
+    const datiLogin = sessionStorage.getItem("datiLogin");
+    const ruolo = 'admin';
     const apiUrl = 'http://localhost:8080/api/libri/getAllLibri';
 
     fetch(apiUrl)
@@ -27,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const copertinaUrl = libro.link;
 
+
                 col.innerHTML = `
                     <div class="card libro-card h-100">
         <img src="${copertinaUrl}" class="card-img-top" alt="Copertina di ${libro.titolo}">
@@ -46,8 +48,16 @@ document.addEventListener('DOMContentLoaded', function () {
             <a href="#" class="toggle-details mt-2 d-block">
                 <i class="fas fa-chevron-down"></i> Mostra dettagli
             </a>
+            
 
             <button class="open-modal-btn btn btn-primary mt-3" data-index="${index}">Prenota</button>
+                `
+            if (ruolo === "admin" || ruolo === "operatore"){
+                `
+                <button class="btn btn-danger mt-3 btnEliminaLibro">Rimuovi libro</button>
+                `
+            }
+            `
         </div>
     </div>
 
@@ -137,12 +147,12 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 function checkSession() {
     const now = Date.now();
-    if (now > datiLogin.expiryTime) {
+    /* if (datiLogin && now > datiLogin?.expiryTime) {
         alert("Sessione scaduta, effettua di nuovo il login");
         sessionStorage.removeItem("utente");
         window.location.href = "/login/login.html";
         return false;
-    }
+    } */
     return true;
 }
 checkSession();
