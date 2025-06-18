@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const ruolo = datiLogin.utente.nomeRuolo;   
     const apiUrl = 'http://localhost:8080/api/libri/getAllLibri';
     const apiUrlPrestito='http://localhost:8080/api/libri/concedi';
+    const formAggiungiLibro = document.getElementById('formAggiungiLibro');
+    const apiUrlAggiungi = 'http://localhost:8080/api/libri/aggiungi';
     const containerAggiungiLibro = document.getElementById('aggiungi-libro-container');
     fetch(apiUrl)
         .then(response => {
@@ -215,6 +217,51 @@ document.addEventListener('click', function (e) {
         modal.classList.remove('show');
         modal.setAttribute('aria-hidden', 'true');
     }
+});
+formAggiungiLibro.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const titolo = formAggiungiLibro.querySelector('[name="titolo"]').value.trim();
+    const autore = formAggiungiLibro.querySelector('[name="autore"]').value.trim();
+    const casaEditrice = formAggiungiLibro.querySelector('[name="casaEditrice"]').value.trim();
+    const genere = formAggiungiLibro.querySelector('[name="genere"]').value.trim();
+    const iban = formAggiungiLibro.querySelector('[name="iban"]').value.trim();
+    const link = formAggiungiLibro.querySelector('[name="immagineLibro"]').value.trim();
+    const disponibilita = parseInt(formAggiungiLibro.querySelector('[name="disponibilita"]').value, 10);
+
+    const nuovoLibro = {
+        titolo,
+        autore,
+        casaEditrice,
+        genere,
+        iban,
+        disponibilita,
+        link
+    };
+
+    fetch(apiUrlAggiungi, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(nuovoLibro)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Errore durante l\'aggiunta del libro');
+        return response.json();
+    })
+    .then(data => {
+        alert('Libro aggiunto con successo!');
+        formAggiungiLibro.reset();
+        const modal = document.getElementById('modalAggiungiLibro');
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+        location.reload(); 
+    })
+    .catch(error => {
+        console.error('Errore:', error);
+        alert('Errore durante l\'aggiunta del libro. Riprova.');
+    });
 });
 });
 function checkSession() {
