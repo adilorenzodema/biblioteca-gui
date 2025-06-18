@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const loadingElement = document.getElementById('loading');
     const errorElement = document.getElementById('error');
 
+<<<<<<< HEAD
     const apiUrl = 'http://localhost:8080/api/libri/getMyLibri';
 
     fetch(apiUrl)
@@ -35,6 +36,91 @@ document.addEventListener('DOMContentLoaded', function () {
             <p class="card-text"><strong>Autore:</strong> ${libro.autore}</p>
             <p class="card-text"><strong>Genere:</strong> ${libro.genere}</p>
 
+=======
+<<<<<<< HEAD
+        const idUtente = parseInt(sessionStorage.getItem('idUtente'));   
+        if (!idUtente || isNaN(idUtente)) {
+            errorElement.textContent = 'Utente non autenticato. Effettua il login.';
+            errorElement.style.display = 'block';
+            loadingElement.style.display = 'none';
+            return;
+        }  
+
+        const apiUrl = `http://localhost:8080/api/libri/getMyLibri?idUtente=${idUtente}`;
+
+    fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) throw new Error('Errore nel recupero dei dati');
+            return response.json();
+        })
+        .then(libri => {
+            loadingElement.style.display = 'none';
+
+            if (libri.length === 0) {
+                libriContainer.innerHTML = `
+                    <div class="col-12">
+                        <div class="alert alert-info">Non hai alcun libro in prestito.</div>
+                    </div>`;
+                return;
+            }
+
+            libri.forEach((libro, index) => {
+                const col = document.createElement('div');
+                col.className = 'col';
+
+                const copertinaUrl = libro.link || 'https://via.placeholder.com/150x200?text=Copertina+non+disponibile';
+
+                col.innerHTML = `
+                    <div class="card libro-card h-100">
+                        <img src="${copertinaUrl}" class="card-img-top" alt="Copertina di ${libro.titolo}" 
+                             onerror="this.onerror=null; this.src='https://via.placeholder.com/150x200?text=Copertina+non+disponibile'">
+                        <div class="card-body">
+                            <h5 class="card-title">${libro.titolo}</h5>
+                            <p class="card-text"><strong>Autore:</strong> ${libro.autore || 'N/A'}</p>
+                            <p class="card-text"><strong>Genere:</strong> ${libro.genere || 'N/A'}</p>
+
+                            <ul class="list-group list-group-flush mt-3">
+                                <li class="list-group-item"><strong>Editore:</strong> ${libro.casaEditrice || 'N/A'}</li>
+                                <li class="list-group-item"><strong>ISBN:</strong> ${libro.iban || 'N/A'}</li>
+                                <li class="list-group-item"><strong>Data Inizio:</strong> ${new Date().toLocaleDateString()}</li>
+                                <li class="list-group-item"><strong>Data Fine:</strong> ${new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString()}</li>
+                            </ul>
+                        </div>
+                    </div>
+=======
+    const apiUrl = 'http://localhost:8080/api/libri/getMyLibri';
+
+    fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) throw new Error('Errore nel recupero dei dati');
+            return response.json();
+        })
+        .then(libri => {
+            loadingElement.style.display = 'none';
+
+            if (libri.length === 0) {
+                libriContainer.innerHTML = `
+                    <div class="col-12">
+                        <div class="alert alert-info">Nessun libro disponibile nel catalogo.</div>
+                    </div>`;
+                return;
+            }
+
+            libri.forEach((libro, index) => {
+                const col = document.createElement('div');
+                col.className = 'col';
+
+                const copertinaUrl = libro.link;
+
+                col.innerHTML = `
+                    <div class="card libro-card h-100">
+        <img src="${copertinaUrl}" class="card-img-top" alt="Copertina di ${libro.titolo}">
+        <div class="card-body">
+            <h5 class="card-title">${libro.titolo}</h5>
+            <p class="card-text"><strong>Autore:</strong> ${libro.autore}</p>
+            <p class="card-text"><strong>Genere:</strong> ${libro.genere}</p>
+
+>>>>>>> d7bfcf9b9fc6ed09d10040f0a69919494ed523e8
             <ul class="list-group list-group-flush mt-3" style="display: none;">
                 <li class="list-group-item"><strong>Editore:</strong> ${libro.casaEditrice}</li>
                 <li class="list-group-item"><strong>ISBN:</strong> ${libro.iban}</li>
@@ -47,7 +133,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 <i class="fas fa-chevron-down"></i> Mostra dettagli
             </a>
 
+<<<<<<< HEAD
             <p class="mt-3"><strong>Stato:</strong> Prenotato</p>
+=======
+            <button class="open-modal-btn btn btn-primary mt-3" data-index="${index}">Prenota</button>
+>>>>>>> d7bfcf9b9fc6ed09d10040f0a69919494ed523e8
         </div>
     </div>
 
@@ -76,10 +166,19 @@ document.addEventListener('DOMContentLoaded', function () {
             </form>
         </div>
     </div>
+<<<<<<< HEAD
+=======
+>>>>>>> 33b1cb2f812e8df8a2d31390a62b5698fd50d669
+>>>>>>> d7bfcf9b9fc6ed09d10040f0a69919494ed523e8
                 `;
 
                 libriContainer.appendChild(col);
             });
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> d7bfcf9b9fc6ed09d10040f0a69919494ed523e8
 
          
             libriContainer.querySelectorAll('.toggle-details').forEach(toggle => {
@@ -116,6 +215,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     e.target.setAttribute('aria-hidden', 'true');
                 }
             });
+<<<<<<< HEAD
+=======
+>>>>>>> 33b1cb2f812e8df8a2d31390a62b5698fd50d669
+>>>>>>> d7bfcf9b9fc6ed09d10040f0a69919494ed523e8
         })
         .catch(error => {
             loadingElement.style.display = 'none';
@@ -123,6 +226,12 @@ document.addEventListener('DOMContentLoaded', function () {
             errorElement.style.display = 'block';
             console.error('Errore:', error);
         });
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+});
+=======
+>>>>>>> d7bfcf9b9fc6ed09d10040f0a69919494ed523e8
 
     function toggleDetails(element) {
         const detailsList = element.previousElementSibling;
@@ -146,3 +255,7 @@ function checkSession() {
     return true;
 }
 checkSession();
+<<<<<<< HEAD
+=======
+>>>>>>> 33b1cb2f812e8df8a2d31390a62b5698fd50d669
+>>>>>>> d7bfcf9b9fc6ed09d10040f0a69919494ed523e8
