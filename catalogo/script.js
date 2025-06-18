@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const ruolo = 'admin';
     const apiUrl = 'http://localhost:8080/api/libri/getAllLibri';
     const apiUrlPrestito='http://localhost:8080/api/libri/concedi';
-
+    const containerAggiungiLibro = document.getElementById('aggiungi-libro-container');
     fetch(apiUrl)
         .then(response => {
             if (!response.ok) throw new Error('Errore nel recupero dei dati');
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                 col.innerHTML = `
-                    <div class="card libro-card h-100">
+    <div class="card libro-card h-100">
         <img src="${copertinaUrl}" class="card-img-top" alt="Copertina di ${libro.titolo}">
         <div class="card-body">
             <h5 class="card-title">${libro.titolo}</h5>
@@ -44,25 +44,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 <li class="list-group-item ${libro.disponibilita !== 0 ? 'disponibile' : 'non-disponibile'}">
                     <strong>Disponibilità:</strong> ${libro.disponibilita !== 0 ? 'Disponibile' : 'Non disponibile'}
                 </li>
-
             </ul>
 
             <a href="#" class="toggle-details mt-2 d-block">
                 <i class="fas fa-chevron-down"></i> Mostra dettagli
             </a>
-            
 
             <button class="open-modal-btn btn btn-primary mt-3" data-index="${index}">Prenota</button>
-                `
-            if (ruolo === "admin" || ruolo === "operatore"){
-                `
+
+            ${ruolo === "admin" || ruolo === "operatore" ? `
                 <button class="btn btn-danger mt-3 btnEliminaLibro">Rimuovi libro</button>
-                `
-            }
-            `
+            ` : ''}
         </div>
     </div>
-
+    <!-- Modal qui sotto -->
     <div class="modal modal-libro" data-index="${index}" style="display: none;" role="dialog" aria-modal="true" aria-hidden="true">
         <div class="modal-content">
             <button class="close-modal-btn close" aria-label="Chiudi Modale">&times;</button>
@@ -88,7 +83,8 @@ document.addEventListener('DOMContentLoaded', function () {
             </form>
         </div>
     </div>
-                `;
+`;
+
 
                 libriContainer.appendChild(col);
             });
@@ -195,6 +191,15 @@ document.addEventListener('DOMContentLoaded', function () {
             ? '<i class="fas fa-chevron-down"></i> Mostra dettagli'
             : '<i class="fas fa-chevron-up"></i> Nascondi dettagli';
     }
+    if (ruolo === 'admin' || ruolo === 'operatore') {
+    const bottone = document.createElement('button');
+    bottone.className = 'btn btn-success';
+    bottone.textContent = 'Aggiungi libro';
+    bottone.addEventListener('click', function () {
+    });
+
+    containerAggiungiLibro.appendChild(bottone);
+}
 });
 function checkSession() {
     const now = Date.now();
@@ -206,4 +211,5 @@ function checkSession() {
     } */
     return true;
 }
+
 checkSession();

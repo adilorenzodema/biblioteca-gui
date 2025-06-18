@@ -13,5 +13,5 @@ function checkSession() {
     }
     return true;
 }
+logoutBtn.addEventListener("click", logout)
 checkSession();
-logoutBtn.addEventListener("click", logout);
