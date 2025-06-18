@@ -9,6 +9,7 @@ body {
     color: white;
     padding: 1rem 0;
     text-align: center;
+    
 }
 
 #nav {
@@ -119,9 +120,17 @@ body {
   font-size: 24px;
   cursor: pointer;
 }
-#aggiungiLibro {
+#aggiungi-libro-container {
+    text-align: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+#aggiungi-libro-container button {
     background-color: green;
-    margin: auto;
-    display: block;
     border-radius: 5px;
+    padding: 8px 16px;
+    color: white;
+    border: none;
+    font-weight: bold;
 }
