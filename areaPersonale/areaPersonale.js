@@ -64,3 +64,12 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Errore:', error);
         });
 });
+
+const logoutBtn=document.getElementById("logoutButton");
+function logout() {
+    sessionStorage.clear();
+    window.location.href = "/login/login.html";
+}
+
+logoutBtn.addEventListener("click", logout)
+checkSession();

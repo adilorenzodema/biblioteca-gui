@@ -136,3 +136,31 @@ body {
   font-size: 24px;
   cursor: pointer;
 }
+.logout-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 8px 16px;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.logout-btn:hover {
+    background-color:white;
+}
+
+#logoutContainer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+}
+#logoutButton {
+    background: red;
+    border-radius: 10px ;
+    margin-top: 10px;
+    margin-right: 10px;
+}
