@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const errorElement = document.getElementById('error');
     const datiLoginString = sessionStorage.getItem("utente");
     const datiLogin = datiLoginString ? JSON.parse(datiLoginString) : null;
-    const ruolo = "admin";
+    const ruolo = "admin";   //datiLogin.utente.ruolo
     const apiUrl = 'http://localhost:8080/api/libri/getAllLibri';
     const apiUrlPrestito='http://localhost:8080/api/libri/concedi';
     const containerAggiungiLibro = document.getElementById('aggiungi-libro-container');
@@ -51,14 +51,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 <i class="fas fa-chevron-down"></i> Mostra dettagli
             </a>
 
-            <button class="open-modal-btn btn btn-primary mt-3" data-index="${index}">Prenota</button>
+           ${ruolo === "admin" || ruolo === "operatore" ? `
+    <button class="open-modal-btn btn btn-primary mt-3" data-index="${index}">Prenota</button>
+` : ''}
 
             ${ruolo === "admin" || ruolo === "operatore" ? `
                 <button class="btn btn-danger mt-3 btnEliminaLibro">Rimuovi libro</button>
             ` : ''}
+            
         </div>
     </div>
-    <!-- Modal qui sotto -->
     <div class="modal modal-libro" data-index="${index}" style="display: none;" role="dialog" aria-modal="true" aria-hidden="true">
         <div class="modal-content">
             <button class="close-modal-btn close" aria-label="Chiudi Modale">&times;</button>
@@ -197,10 +199,23 @@ document.addEventListener('DOMContentLoaded', function () {
     bottone.className = 'btn btn-success';
     bottone.textContent = 'Aggiungi libro';
     bottone.addEventListener('click', function () {
+        const modal = document.getElementById('modalAggiungiLibro');
+        modal.style.display = 'flex';
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden', 'false');
     });
 
     containerAggiungiLibro.appendChild(bottone);
 }
+
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('close-modal-btn') || e.target.id === 'modalAggiungiLibro') {
+        const modal = document.getElementById('modalAggiungiLibro');
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+});
 });
 function checkSession() {
     const datiLoginString = sessionStorage.getItem("utente");

@@ -34,7 +34,43 @@
         <div id="libri-container" class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4"></div>
     </div>
 
- 
+    <div class="modal modal-aggiungi-libro" id="modalAggiungiLibro" style="display: none;" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content">
+        <button class="close-modal-btn close" aria-label="Chiudi Modale">&times;</button>
+        <h2 class="mb-3">Aggiungi un nuovo libro</h2>
+        <form id="formAggiungiLibro">
+            <div class="mb-2">
+                <label class="form-label">Titolo</label>
+                <input type="text" class="form-control" name="titolo" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Autore</label>
+                <input type="text" class="form-control" name="autore" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Casa Editrice</label>
+                <input type="text" class="form-control" name="casaEditrice" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Genere</label>
+                <input type="text" class="form-control" name="genere" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">IBAN</label>
+                <input type="text" class="form-control" name="iban" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">link immagine libro</label>
+                <input type="text" class="form-control" name="immagineLibro" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Disponibilità</label>
+                <input type="number" class="form-control" name="disponibilita" min="0" required>
+            </div>
+            <button type="submit" class="btn btn-success">Salva libro</button>
+        </form>
+    </div>
+</div>
 
 
     <script src="script.js"></script>
