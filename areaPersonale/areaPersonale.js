@@ -47,8 +47,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             <ul class="list-group list-group-flush mt-3">
                                 <li class="list-group-item"><strong>Editore:</strong> ${libro.casaEditrice || 'N/A'}</li>
                                 <li class="list-group-item"><strong>ISBN:</strong> ${libro.iban || 'N/A'}</li>
-                                <li class="list-group-item"><strong>Data Inizio:</strong> ${new Date().toLocaleDateString()}</li>
-                                <li class="list-group-item"><strong>Data Fine:</strong> ${new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString()}</li>
+                                <li class="list-group-item"><strong>Data Inizio Prestito:</strong> ${new Date().toLocaleDateString()}</li>
+                                <li class="list-group-item"><strong>Data Fine Prestito:</strong> ${new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString()}</li>
                             </ul>
                         </div>
                     </div>
