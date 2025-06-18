@@ -2,8 +2,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const libriContainer = document.getElementById('libri-container');
     const loadingElement = document.getElementById('loading');
     const errorElement = document.getElementById('error');
-    const datiLogin = sessionStorage.getItem("datiLogin");
-    const ruolo = 'admin';
+    const datiLoginString = sessionStorage.getItem("utente");
+    const datiLogin = datiLoginString ? JSON.parse(datiLoginString) : null;
+    const ruolo = "admin";
     const apiUrl = 'http://localhost:8080/api/libri/getAllLibri';
     const apiUrlPrestito='http://localhost:8080/api/libri/concedi';
     const containerAggiungiLibro = document.getElementById('aggiungi-libro-container');
@@ -202,14 +203,24 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 });
 function checkSession() {
-    const now = Date.now();
-    /* if (datiLogin && now > datiLogin?.expiryTime) {
-        alert("Sessione scaduta, effettua di nuovo il login");
-        sessionStorage.removeItem("utente");
+    const datiLoginString = sessionStorage.getItem("utente");
+
+    if (!datiLoginString) {
+        alert("Sessione non trovata. Effettua il login.");
         window.location.href = "/login/login.html";
         return false;
-    } */
+    }
+
+    const datiLogin = JSON.parse(datiLoginString);
+    const now = Date.now();
+
+    if (now > datiLogin.expiryTime) {
+        alert("Sessione scaduta. Effettua di nuovo il login.");
+        sessionStorage.clear(); 
+        window.location.href = "/login/login.html";
+        return false;
+    }
+
     return true;
 }
-
 checkSession();

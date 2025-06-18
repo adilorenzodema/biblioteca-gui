@@ -23,20 +23,22 @@ function doLogin() {
     })
     .then(utenteLoggato => {
         const loginTime = Date.now();
-        const expiryTime = loginTime + 1 * 60 * 60 * 1000;
-        sessionStorage.setItem('idUtente', utenteLoggato.idUtente);
+        const expiryTime = loginTime + (1*60*60*1000);
+
         const datiLogin = {
-        utente: utenteLoggato,
-        loginTime: loginTime,
-        expiryTime: expiryTime
+            utente: utenteLoggato,
+            loginTime: loginTime,
+            expiryTime: expiryTime
         };
+
         sessionStorage.setItem("utente", JSON.stringify(datiLogin));
-        console.log("Utente salvato in sessionStorage:", utenteLoggato);
+
+        console.log("Sessione salvata:", datiLogin);
         window.location.href = "../homePage/homepage.html";
-    })
-    .catch(error => {
-        console.error("Errore nella fetch:", error);
-        alert("Errore nella comunicazione con il server");
+        })
+        .catch(error => {
+            console.error("Errore nella fetch:", error);
+            alert("Errore nella comunicazione con il server");
     })
 
 }
