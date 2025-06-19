@@ -3,15 +3,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const loadingElement = document.getElementById('loading');
     const errorElement = document.getElementById('error');
 
-        const idUtente = parseInt(sessionStorage.getItem('idUtente'));   
-        if (!idUtente || isNaN(idUtente)) {
-            errorElement.textContent = 'Utente non autenticato. Effettua il login.';
-            errorElement.style.display = 'block';
-            loadingElement.style.display = 'none';
-            return;
-        }  
+    const datiLogin = JSON.parse(sessionStorage.getItem("utente"));
+    const idUtente = datiLogin?.utente?.idUtente;
 
-        const apiUrl = `http://localhost:8080/api/libri/getMyLibri?idUtente=${idUtente}`;
+    if (!idUtente || isNaN(idUtente)) {
+        errorElement.textContent = 'Utente non autenticato. Effettua il login.';
+        errorElement.style.display = 'block';
+        loadingElement.style.display = 'none';
+        return;
+    }
+
+    const apiUrl = `http://localhost:8080/api/libri/getMyLibri?idUtente=${idUtente}`;
 
     fetch(apiUrl)
         .then(response => {
@@ -35,8 +37,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const copertinaUrl = libro.link || 'https://via.placeholder.com/150x200?text=Copertina+non+disponibile';
 
+                // Calcola date prestito (qui puoi usare libro.dataInizio se lo ricevi dal backend)
+                const inizioPrestito = libro.inizioPrestito ? new Date(libro.dataInizio) : new Date(); // fallback: oggi
+                const finePrestito = new Date(inizioPrestito.getTime() + 30 * 24 * 60 * 60 * 1000);
+                const oggi = new Date();
+
+                const isScaduto = oggi > finePrestito;
+
+                // Mostra alert se il prestito è scaduto
+                if (isScaduto) {
+                    alert(`⚠️ Il prestito del libro "${libro.titolo}" è scaduto.\nTi invitiamo a riportarlo in biblioteca.`);
+                }
+
                 col.innerHTML = `
-                    <div class="card libro-card h-100">
+                    <div class="card libro-card h-100 ${isScaduto ? 'border-danger' : ''}">
                         <img src="${copertinaUrl}" class="card-img-top" alt="Copertina di ${libro.titolo}" 
                              onerror="this.onerror=null; this.src='https://via.placeholder.com/150x200?text=Copertina+non+disponibile'">
                         <div class="card-body">
@@ -47,9 +61,15 @@ document.addEventListener('DOMContentLoaded', function () {
                             <ul class="list-group list-group-flush mt-3">
                                 <li class="list-group-item"><strong>Editore:</strong> ${libro.casaEditrice || 'N/A'}</li>
                                 <li class="list-group-item"><strong>ISBN:</strong> ${libro.iban || 'N/A'}</li>
-                                <li class="list-group-item"><strong>Data Inizio Prestito:</strong> ${new Date().toLocaleDateString()}</li>
-                                <li class="list-group-item"><strong>Data Fine Prestito:</strong> ${new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString()}</li>
+                                <li class="list-group-item"><strong>Data Inizio Prestito:</strong> ${inizioPrestito.toLocaleDateString()}</li>
+                                <li class="list-group-item"><strong>Data Fine Prestito:</strong> ${finePrestito.toLocaleDateString()}</li>
                             </ul>
+
+                            ${isScaduto ? `
+                                <div class="alert alert-danger mt-3" role="alert">
+                                    Prestito del libro scaduto, riportare in biblioteca.
+                                </div>
+                            ` : ''}
                         </div>
                     </div>
                 `;
@@ -65,11 +85,37 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 });
 
-const logoutBtn=document.getElementById("logoutButton");
+// LOGOUT
+const logoutBtn = document.getElementById("logoutButton");
+
 function logout() {
     sessionStorage.clear();
     window.location.href = "/login/login.html";
 }
 
-logoutBtn.addEventListener("click", logout)
+logoutBtn.addEventListener("click", logout);
+
+// SESSION CHECK
+function checkSession() {
+    const datiLoginString = sessionStorage.getItem("utente");
+
+    if (!datiLoginString) {
+        alert("Sessione non trovata. Effettua il login.");
+        window.location.href = "/login/login.html";
+        return false;
+    }
+
+    const datiLogin = JSON.parse(datiLoginString);
+    const now = Date.now();
+
+    if (now > datiLogin.expiryTime) {
+        alert("Sessione scaduta. Effettua di nuovo il login.");
+        sessionStorage.clear(); 
+        window.location.href = "/login/login.html";
+        return false;
+    }
+
+    return true;
+}
+
 checkSession();
