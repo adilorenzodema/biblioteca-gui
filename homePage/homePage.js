@@ -1,3 +1,27 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const datiLoginString = sessionStorage.getItem("utente");
+
+    if (!datiLoginString) {
+        alert("Sessione non trovata. Effettua il login.");
+        window.location.href = "/login/login.html";
+        return;
+    }
+
+    const datiLogin = JSON.parse(datiLoginString);
+    const ruolo = datiLogin.utente.nomeRuolo;
+
+    if (ruolo === "admin" || ruolo === "operatore") {
+        const navList = document.getElementById("navList");
+
+        const nuovoElementoNav = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = "";
+        link.textContent = "Gestione Utenti";
+
+        nuovoElementoNav.appendChild(link);
+        navList.appendChild(nuovoElementoNav);
+    }
+});
 const logoutBtn=document.getElementById("logoutButton");
 function logout() {
     sessionStorage.clear();
