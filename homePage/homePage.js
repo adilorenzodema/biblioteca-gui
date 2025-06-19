@@ -10,25 +10,43 @@ document.addEventListener("DOMContentLoaded", function () {
     const datiLogin = JSON.parse(datiLoginString);
     const ruolo = datiLogin.utente.nomeRuolo;
 
+    // Mostra "Gestione Utenti" solo per admin o operatori
     if (ruolo === "admin" || ruolo === "operatore") {
         const navList = document.getElementById("navList");
 
         const nuovoElementoNav = document.createElement("li");
         const link = document.createElement("a");
-        link.href = "/utenti/utenti.html";
+        link.href = "../utenti/utenti.html";
         link.textContent = "Gestione Utenti";
 
         nuovoElementoNav.appendChild(link);
         navList.appendChild(nuovoElementoNav);
     }
+
+    // Nascondi "Area Personale" se NON è un alunno
+    if (ruolo !== "alunno") {
+        const areaPersonaleLink = document.getElementById("areaPersonaleLink");
+        if (areaPersonaleLink) {
+            areaPersonaleLink.parentElement.remove(); // rimuove il <li> intero
+        }
+    }
 });
-const logoutBtn=document.getElementById("logoutButton");
+
+// Gestione logout e sessione
+const logoutBtn = document.getElementById("logoutButton");
 function logout() {
     sessionStorage.clear();
     window.location.href = "../login/login.html";
 }
+logoutBtn.addEventListener("click", logout);
+
 function checkSession() {
+    const datiLoginString = sessionStorage.getItem("utente");
+    if (!datiLoginString) return;
+
+    const datiLogin = JSON.parse(datiLoginString);
     const now = Date.now();
+
     if (now > datiLogin.expiryTime) {
         alert("Sessione scaduta, effettua di nuovo il login");
         sessionStorage.removeItem("utente");
@@ -37,5 +55,4 @@ function checkSession() {
     }
     return true;
 }
-logoutBtn.addEventListener("click", logout)
 checkSession();

@@ -72,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="card-content">
                     <h3>${utente.nome} ${utente.cognome}</h3>
                     <p><strong>Codice Fiscale:</strong> ${utente.codiceFiscale}</p>
-                    <p><strong>Codice Fiscale:</strong> ${utente.classe}</p>
                     <p><strong>Username:</strong> ${utente.username}</p>
                     <p><strong>Password:</strong> ${utente.password}</p>
                     <p><strong>Data Creazione:</strong> ${formatDate(utente.dataCreazione)}</p>
@@ -124,7 +123,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function creaBottoniFiltro() {
         filtroContainer.innerHTML = '';
 
-        // Bottone "Tutti"
         const btnTutti = document.createElement('button');
         btnTutti.className = 'btn btn-secondary me-2 mb-2';
         btnTutti.textContent = 'Tutti';
@@ -177,7 +175,6 @@ document.addEventListener('DOMContentLoaded', function () {
             nome: formAggiungiUtente.nome.value.trim(),
             cognome: formAggiungiUtente.cognome.value.trim(),
             codiceFiscale: formAggiungiUtente.codiceFiscale.value.trim(),
-            classe: formAggiungiUtente.classe.value.trim(),
             username: formAggiungiUtente.username.value.trim(),
             password: formAggiungiUtente.password.value.trim(),
             idRuolo: parseInt(formAggiungiUtente.idRuolo.value, 10),

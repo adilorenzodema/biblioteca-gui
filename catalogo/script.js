@@ -4,7 +4,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const errorElement = document.getElementById('error');
     const datiLoginString = sessionStorage.getItem("utente");
     const datiLogin = datiLoginString ? JSON.parse(datiLoginString) : null;
-    const ruolo = datiLogin && datiLogin.utente ? datiLogin.utente.nomeRuolo : null;   
+    const ruolo = datiLogin && datiLogin.utente ? datiLogin.utente.nomeRuolo : null;  
+    const areaPersonaleLink = document.getElementById('areaPersonaleLink');
+if (areaPersonaleLink && (ruolo === 'admin' || ruolo === 'operatore')) {
+    areaPersonaleLink.style.display = 'none';
+} 
+const gestioneUtentiLink = document.getElementById("gestioneUtentiLink");
+
+if (gestioneUtentiLink && (ruolo === "admin" || ruolo === "operatore")) {
+    gestioneUtentiLink.style.display = "list-item";
+}
     const apiUrl = 'http://localhost:8080/api/libri/getAllLibri';
     const apiUrlPrestito = 'http://localhost:8080/api/libri/concedi';
     const formAggiungiLibro = document.getElementById('formAggiungiLibro');
