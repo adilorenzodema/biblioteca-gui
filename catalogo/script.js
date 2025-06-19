@@ -125,7 +125,6 @@ if (gestioneUtentiLink && (ruolo === "admin" || ruolo === "operatore")) {
                     }
                 }
 
-                // Close modal clicking outside content
                 if (e.target.classList.contains('modal-libro')) {
                     e.target.style.display = 'none';
                     e.target.classList.remove('show');
