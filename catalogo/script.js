@@ -116,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
 
-                // Close modal clicking outside content
                 if (e.target.classList.contains('modal-libro')) {
                     e.target.style.display = 'none';
                     e.target.classList.remove('show');
