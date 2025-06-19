@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const nuovoElementoNav = document.createElement("li");
         const link = document.createElement("a");
-        link.href = "/utenti/utenti.html";
+        link.href = "../utenti/utenti.html";
         link.textContent = "Gestione Utenti";
 
         nuovoElementoNav.appendChild(link);
