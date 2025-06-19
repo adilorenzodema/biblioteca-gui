@@ -298,7 +298,7 @@ function checkSession() {
 
     if (!datiLoginString) {
         alert("Sessione non trovata. Effettua il login.");
-        window.location.href = "/login/login.html";
+        window.location.href = "../login/login.html";
         return false;
     }
 
@@ -308,7 +308,7 @@ function checkSession() {
     if (now > datiLogin.expiryTime) {
         alert("Sessione scaduta. Effettua di nuovo il login.");
         sessionStorage.clear(); 
-        window.location.href = "/login/login.html";
+        window.location.href = "../login/login.html";
         return false;
     }
 
@@ -321,6 +321,6 @@ const logoutBtn = document.getElementById("logoutButton");
 if (logoutBtn) {
     logoutBtn.addEventListener("click", function() {
         sessionStorage.clear();
-        window.location.href = "/login/login.html";
+        window.location.href = "../login/login.html";
     });
 }
