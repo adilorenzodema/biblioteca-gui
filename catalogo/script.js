@@ -252,7 +252,6 @@ document.addEventListener('DOMContentLoaded', function () {
             })
                 .then(response => {
                     if (!response.ok) throw new Error('Errore durante l\'aggiunta del libro');
-                    return response.json();
                 })
                 .then(data => {
                     alert('Libro aggiunto con successo!');
@@ -266,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .catch(error => {
                     console.error('Errore:', error);
-                    alert('Errore durante l\'aggiunta del libro. Riprova.');
+                    alert('Errore durante l\'aggiunta del libro.');
                 });
         });
     }
