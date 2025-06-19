@@ -90,7 +90,7 @@ const logoutBtn = document.getElementById("logoutButton");
 
 function logout() {
     sessionStorage.clear();
-    window.location.href = "/login/login.html";
+    window.location.href = "../login/login.html";
 }
 
 logoutBtn.addEventListener("click", logout);
@@ -101,7 +101,7 @@ function checkSession() {
 
     if (!datiLoginString) {
         alert("Sessione non trovata. Effettua il login.");
-        window.location.href = "/login/login.html";
+        window.location.href = "../login/login.html";
         return false;
     }
 
@@ -111,7 +111,7 @@ function checkSession() {
     if (now > datiLogin.expiryTime) {
         alert("Sessione scaduta. Effettua di nuovo il login.");
         sessionStorage.clear(); 
-        window.location.href = "/login/login.html";
+        window.location.href = "../login/login.html";
         return false;
     }
 
