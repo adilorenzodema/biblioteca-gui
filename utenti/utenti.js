@@ -65,35 +65,34 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         filtrati.forEach(utente => {
-            const card = document.createElement('div');
-            card.className = 'card-utente';
+    const card = document.createElement('div');
+    card.className = 'card-utente';
 
-            let html = `
-                <div class="card-content">
-                    <h3>${utente.nome} ${utente.cognome}</h3>
-                    <p><strong>Codice Fiscale:</strong> ${utente.codiceFiscale}</p>
-                    <p><strong>Codice Fiscale:</strong> ${utente.classe}</p>
-                    <p><strong>Username:</strong> ${utente.username}</p>
-                    <p><strong>Password:</strong> ${utente.password}</p>
-                    <p><strong>Data Creazione:</strong> ${formatDate(utente.dataCreazione)}</p>
-                    <p><strong>Data Modifica:</strong> ${formatDate(utente.dataModifica)}</p>
-                    <p><strong>Attivo:</strong> ${utente.active ? 'Sì' : 'No'}</p>
-                    <p><strong>ID Ruolo:</strong> ${utente.idRuolo}</p>
-                    <p><strong>Nome Ruolo:</strong> ${utente.nomeRuolo}</p>
-            `;
+    let html = `
+        <div class="card-content">
+            <h3>${utente.nome} ${utente.cognome}</h3>
+            <p><strong>Codice Fiscale:</strong> ${utente.codiceFiscale}</p>
+            <p><strong>Classe:</strong> ${utente.classe}</p>
+            <p><strong>Username:</strong> ${utente.username}</p>
+            <p><strong>Password:</strong> ${utente.password}</p>
+            <p><strong>Data Creazione:</strong> ${formatDate(utente.dataCreazione)}</p>
+            <p><strong>Data Modifica:</strong> ${formatDate(utente.dataModifica)}</p>
+            <p><strong>Attivo:</strong> ${utente.active ? 'Sì' : 'No'}</p>
+            <p><strong>ID Ruolo:</strong> ${utente.idRuolo}</p>
+            <p><strong>Nome Ruolo:</strong> ${utente.nomeRuolo}</p>
+    `;
+    if (ruoloLoggato === 'admin' && utente.nomeRuolo.toLowerCase() !== 'admin') {
+        html += `
+            <button class="btn btn-danger btn-rimuovi-utente" data-id="${utente.idUtente}">
+                Rimuovi utente
+            </button>`;
+    }
 
-            if (ruoloLoggato === 'admin') {
-                html += `
-                    <button class="btn btn-danger btn-rimuovi-utente" data-id="${utente.idUtente}">
-                        Rimuovi utente
-                    </button>`;
-            }
+    html += `</div>`;
+    card.innerHTML = html;
 
-            html += `</div>`;
-            card.innerHTML = html;
-
-            container.appendChild(card);
-        });
+    container.appendChild(card);
+});
 
 
         document.querySelectorAll('.btn-rimuovi-utente').forEach(button => {
@@ -124,7 +123,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function creaBottoniFiltro() {
         filtroContainer.innerHTML = '';
 
-        // Bottone "Tutti"
         const btnTutti = document.createElement('button');
         btnTutti.className = 'btn btn-secondary me-2 mb-2';
         btnTutti.textContent = 'Tutti';
