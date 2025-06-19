@@ -4,12 +4,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const errorElement = document.getElementById('error');
     const datiLoginString = sessionStorage.getItem("utente");
     const datiLogin = datiLoginString ? JSON.parse(datiLoginString) : null;
-    const ruolo = datiLogin.utente.nomeRuolo;   
+    const ruolo = datiLogin && datiLogin.utente ? datiLogin.utente.nomeRuolo : null;   
     const apiUrl = 'http://localhost:8080/api/libri/getAllLibri';
-    const apiUrlPrestito='http://localhost:8080/api/libri/concedi';
+    const apiUrlPrestito = 'http://localhost:8080/api/libri/concedi';
     const formAggiungiLibro = document.getElementById('formAggiungiLibro');
     const apiUrlAggiungi = 'http://localhost:8080/api/libri/aggiungi';
     const containerAggiungiLibro = document.getElementById('aggiungi-libro-container');
+
     fetch(apiUrl)
         .then(response => {
             if (!response.ok) throw new Error('Errore nel recupero dei dati');
@@ -32,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const copertinaUrl = libro.link;
 
-
                 col.innerHTML = `
     <div class="card libro-card h-100">
         <img src="${copertinaUrl}" class="card-img-top" alt="Copertina di ${libro.titolo}">
@@ -53,14 +53,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 <i class="fas fa-chevron-down"></i> Mostra dettagli
             </a>
 
-           ${ruolo === "admin" || ruolo === "operatore" ? `
-    <button class="open-modal-btn btn btn-primary mt-3" data-index="${index}">prestito</button>
-` : ''}
-
             ${ruolo === "admin" || ruolo === "operatore" ? `
-                <button class="btn btn-danger mt-3 btnEliminaLibro">Rimuovi libro</button>
+                <button class="open-modal-btn btn btn-primary mt-3" data-index="${index}">prestito</button>
+                <button class="btn btn-danger mt-3 btnEliminaLibro" data-idlibro="${libro.idLibro}">Rimuovi libro</button>
             ` : ''}
-            
         </div>
     </div>
     <div class="modal modal-libro" data-index="${index}" style="display: none;" role="dialog" aria-modal="true" aria-hidden="true">
@@ -90,7 +86,6 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
 `;
 
-
                 libriContainer.appendChild(col);
             });
 
@@ -101,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             });
 
-          
             libriContainer.addEventListener('click', function (e) {
                 if (e.target.classList.contains('open-modal-btn')) {
                     const index = e.target.getAttribute('data-index');
@@ -122,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
 
+                // Close modal clicking outside content
                 if (e.target.classList.contains('modal-libro')) {
                     e.target.style.display = 'none';
                     e.target.classList.remove('show');
@@ -130,53 +125,53 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             libriContainer.addEventListener('submit', function (e) {
-    if (e.target.classList.contains('form-prenotazione')) {
-        e.preventDefault();
+                if (e.target.classList.contains('form-prenotazione')) {
+                    e.preventDefault();
 
-        const form = e.target;
-        const idLibro = form.getAttribute('data-idlibro');
-        const index = form.closest('.modal-libro').getAttribute('data-index');
-        const idUtente = sessionStorage.getItem('idUtente');
-        if (!idUtente) {
-            alert('Utente non autenticato! Effettua il login.');
-            return;
-        }
-        const nome = form.querySelector(`#nome-${index}`).value.trim();
-        const cognome = form.querySelector(`#cognome-${index}`).value.trim();
-        const classe = form.querySelector(`#classe-${index}`).value.trim();
-        const codiceFiscale = form.querySelector(`#cf-${index}`).value.trim();
+                    const form = e.target;
+                    const idLibro = form.getAttribute('data-idlibro');
+                    const index = form.closest('.modal-libro').getAttribute('data-index');
+                    const idUtente = sessionStorage.getItem('idUtente');
+                    if (!idUtente) {
+                        alert('Utente non autenticato! Effettua il login.');
+                        return;
+                    }
+                    const nome = form.querySelector(`#nome-${index}`).value.trim();
+                    const cognome = form.querySelector(`#cognome-${index}`).value.trim();
+                    const classe = form.querySelector(`#classe-${index}`).value.trim();
+                    const codiceFiscale = form.querySelector(`#cf-${index}`).value.trim();
 
-        const prenotazione = {
-            idLibro: parseInt(idLibro),
-            idUtente: parseInt(idUtente),
-            nome,
-            cognome,
-            classe,
-            codiceFiscale
-        };
+                    const prenotazione = {
+                        idLibro: parseInt(idLibro),
+                        idUtente: parseInt(idUtente),
+                        nome,
+                        cognome,
+                        classe,
+                        codiceFiscale
+                    };
 
-        fetch(apiUrlPrestito, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(prenotazione)
-        })
-            .then(response => {
-                if (!response.ok) throw new Error('Non è stato possibile effettuare la prenotazione');
-                return response.text();
-            })
-            .then(data => {
-                alert('Prenotazione effettuata con successo!');
-                form.reset();
-                form.closest('.modal-libro').style.display = 'none';
-            })
-            .catch(error => {
-                console.error('Errore nella prenotazione:', error);
-                alert('Errore durante la prenotazione. Riprova più tardi.');
+                    fetch(apiUrlPrestito, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(prenotazione)
+                    })
+                        .then(response => {
+                            if (!response.ok) throw new Error('Non è stato possibile effettuare la prenotazione');
+                            return response.text();
+                        })
+                        .then(data => {
+                            alert('Prenotazione effettuata con successo!');
+                            form.reset();
+                            form.closest('.modal-libro').style.display = 'none';
+                        })
+                        .catch(error => {
+                            console.error('Errore nella prenotazione:', error);
+                            alert('Errore durante la prenotazione. Riprova più tardi.');
+                        });
+                }
             });
-    }
-});
 
         })
         .catch(error => {
@@ -196,74 +191,108 @@ document.addEventListener('DOMContentLoaded', function () {
             ? '<i class="fas fa-chevron-down"></i> Mostra dettagli'
             : '<i class="fas fa-chevron-up"></i> Nascondi dettagli';
     }
+
     if (ruolo === 'admin' || ruolo === 'operatore') {
-    const bottone = document.createElement('button');
-    bottone.className = 'btn btn-success';
-    bottone.textContent = 'Aggiungi libro';
-    bottone.addEventListener('click', function () {
-        const modal = document.getElementById('modalAggiungiLibro');
-        modal.style.display = 'flex';
-        modal.classList.add('show');
-        modal.setAttribute('aria-hidden', 'false');
-    });
+        const bottone = document.createElement('button');
+        bottone.className = 'btn btn-success';
+        bottone.textContent = 'Aggiungi libro';
+        bottone.addEventListener('click', function () {
+            const modal = document.getElementById('modalAggiungiLibro');
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.classList.add('show');
+                modal.setAttribute('aria-hidden', 'false');
+            }
+        });
 
-    containerAggiungiLibro.appendChild(bottone);
-}
-
-document.addEventListener('click', function (e) {
-    if (e.target.classList.contains('close-modal-btn') || e.target.id === 'modalAggiungiLibro') {
-        const modal = document.getElementById('modalAggiungiLibro');
-        modal.style.display = 'none';
-        modal.classList.remove('show');
-        modal.setAttribute('aria-hidden', 'true');
+        if (containerAggiungiLibro) {
+            containerAggiungiLibro.appendChild(bottone);
+        }
     }
-});
-formAggiungiLibro.addEventListener('submit', function (e) {
-    e.preventDefault();
 
-    const titolo = formAggiungiLibro.querySelector('[name="titolo"]').value.trim();
-    const autore = formAggiungiLibro.querySelector('[name="autore"]').value.trim();
-    const casaEditrice = formAggiungiLibro.querySelector('[name="casaEditrice"]').value.trim();
-    const genere = formAggiungiLibro.querySelector('[name="genere"]').value.trim();
-    const iban = formAggiungiLibro.querySelector('[name="iban"]').value.trim();
-    const link = formAggiungiLibro.querySelector('[name="immagineLibro"]').value.trim();
-    const disponibilita = parseInt(formAggiungiLibro.querySelector('[name="disponibilita"]').value, 10);
+    document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('close-modal-btn') || e.target.id === 'modalAggiungiLibro') {
+            const modal = document.getElementById('modalAggiungiLibro');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.classList.remove('show');
+                modal.setAttribute('aria-hidden', 'true');
+            }
+        }
+    });
 
-    const nuovoLibro = {
-        titolo,
-        autore,
-        casaEditrice,
-        genere,
-        iban,
-        disponibilita,
-        link
-    };
+    if (formAggiungiLibro) {
+        formAggiungiLibro.addEventListener('submit', function (e) {
+            e.preventDefault();
 
-    fetch(apiUrlAggiungi, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(nuovoLibro)
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Errore durante l\'aggiunta del libro');
-        return response.json();
-    })
-    .then(data => {
-        alert('Libro aggiunto con successo!');
-        formAggiungiLibro.reset();
-        const modal = document.getElementById('modalAggiungiLibro');
-        modal.style.display = 'none';
-        modal.classList.remove('show');
-        location.reload(); 
-    })
-    .catch(error => {
-        console.error('Errore:', error);
-        alert('Errore durante l\'aggiunta del libro. Riprova.');
+            const titolo = formAggiungiLibro.querySelector('[name="titolo"]').value.trim();
+            const autore = formAggiungiLibro.querySelector('[name="autore"]').value.trim();
+            const casaEditrice = formAggiungiLibro.querySelector('[name="casaEditrice"]').value.trim();
+            const genere = formAggiungiLibro.querySelector('[name="genere"]').value.trim();
+            const iban = formAggiungiLibro.querySelector('[name="iban"]').value.trim();
+            const link = formAggiungiLibro.querySelector('[name="immagineLibro"]').value.trim();
+            const disponibilita = parseInt(formAggiungiLibro.querySelector('[name="disponibilita"]').value, 10);
+
+            const nuovoLibro = {
+                titolo,
+                autore,
+                casaEditrice,
+                genere,
+                iban,
+                disponibilita,
+                link
+            };
+
+            fetch(apiUrlAggiungi, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(nuovoLibro)
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('Errore durante l\'aggiunta del libro');
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Libro aggiunto con successo!');
+                    formAggiungiLibro.reset();
+                    const modal = document.getElementById('modalAggiungiLibro');
+                    if (modal) {
+                        modal.style.display = 'none';
+                        modal.classList.remove('show');
+                    }
+                    location.reload(); 
+                })
+                .catch(error => {
+                    console.error('Errore:', error);
+                    alert('Errore durante l\'aggiunta del libro. Riprova.');
+                });
+        });
+    }
+
+    libriContainer.addEventListener('click', function (e) {
+        if (e.target.classList.contains('btnEliminaLibro')) {
+            const idLibro = e.target.getAttribute('data-idlibro');
+
+            if (confirm("Sei sicuro di voler eliminare questo libro?")) {
+                fetch(`http://localhost:8080/api/libri/${idLibro}`, {
+                    method: 'DELETE' 
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Errore durante l\'eliminazione del libro');
+                        alert('Libro eliminato con successo!');
+                        location.reload(); 
+                    })
+                    .catch(error => {
+                        console.error('Errore:', error);
+                        alert('Errore durante l\'eliminazione. Riprova.');
+                    });
+            }
+        }
     });
 });
-});
+
 function checkSession() {
     const datiLoginString = sessionStorage.getItem("utente");
 
@@ -285,13 +314,13 @@ function checkSession() {
 
     return true;
 }
+
 checkSession();
 
-const logoutBtn=document.getElementById("logoutButton");
-function logout() {
-    sessionStorage.clear();
-    window.location.href = "/login/login.html";
+const logoutBtn = document.getElementById("logoutButton");
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", function() {
+        sessionStorage.clear();
+        window.location.href = "/login/login.html";
+    });
 }
-
-logoutBtn.addEventListener("click", logout)
-checkSession();
