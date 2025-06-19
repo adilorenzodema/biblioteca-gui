@@ -123,7 +123,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function creaBottoniFiltro() {
         filtroContainer.innerHTML = '';
 
-        // Bottone "Tutti"
         const btnTutti = document.createElement('button');
         btnTutti.className = 'btn btn-secondary me-2 mb-2';
         btnTutti.textContent = 'Tutti';
