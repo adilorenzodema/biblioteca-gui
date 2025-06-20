@@ -88,19 +88,20 @@ body {
             transition: background-color 0.3s;
             }
 
-#nav ul li a:hover {
+        #nav ul li a:hover {
             background-color: #1abc9c;
         }
+        
+        #nav ul li a.current {
+            background-color: dodgerblue;
+        }
 
-#nav ul li a.current:hover {
-    background-color: dodgerblue;  
-    color: white;
-}
-
-#main {
-            padding: 2rem;
+        #main {
             text-align: center;
             }
+        .main-content {
+            padding: 100px 20px 20px; /* Spazio per header e nav fissi */
+        }
 
 #footer {
             background-color: #2c3e50;
