@@ -56,3 +56,9 @@
 #messaggioErrore{
     color: red;
 }
+#registerBtn{
+    margin-top: 20px;
+    width: 100% ;
+    color:  #ffffff;
+    background-color: #000000;
+}

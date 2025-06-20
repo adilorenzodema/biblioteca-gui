@@ -1,5 +1,6 @@
 const messaggioErrore = document.getElementById("messaggioErrore");
 const loginBtn = document.getElementById("loginBtn");
+const registerBtn=document.getElementById("registerBtn")
 
 function doLogin() {
     const username = document.getElementById("inputEmail").value;
@@ -42,3 +43,7 @@ function doLogin() {
     })
 
 }
+function relocation(){
+    window.location.href = '../registrazione/registrazione.html';
+}
+registerBtn.addEventListener("click", relocation);
