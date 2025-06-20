@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const index = modal.getAttribute('data-index');
 
         // Seleziona la select con id corretto usando l'index
-        const selectAlunno = document.getElementById(`idAlunno`);
+        const selectAlunno = document.getElementById("idAlunno");
 
         if (!selectAlunno) {
             alert("Errore: campo selezione alunno non trovato.");

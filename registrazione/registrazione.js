@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
             classe: formAggiungiUtente.classe.value.trim(),
             username: formAggiungiUtente.username.value.trim(),
             password: formAggiungiUtente.password.value.trim(),
-            idRuolo: parseInt(formAggiungiUtente.idRuolo.value, 10),
-            nomeRuolo: formAggiungiUtente.nomeRuolo.value.trim()
+            idRuolo: 2,
+            nomeRuolo: "alunno"
         };
 
         messaggioErrore.textContent = '';
