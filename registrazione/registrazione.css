@@ -74,9 +74,13 @@ h1 {
     transition: background-color 0.3s ease;
 }
 
-#registerBtn:hover {
-    background-color: grey;
-}
+        #nav ul li a:hover {
+            background-color: #1abc9c;
+        }
+        
+        #nav ul li a.current {
+            background-color: dodgerblue;
+        }
 
 /* Responsive: su schermi stretti passa a 1 colonna */
 @media (max-width: 600px) {

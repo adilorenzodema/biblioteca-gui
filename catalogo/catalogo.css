@@ -91,14 +91,15 @@ body {
     transition: background-color 0.3s;
 }
 
-#nav ul li a:hover {
-    background-color: #1abc9c;
-}
+    #nav ul li a:hover {
+        background-color: #1abc9c;
+    }
+        
+    #nav ul li a.current {
+        background-color: dodgerblue;
+    }
 
-#nav ul li a.current:hover {
-    background-color: dodgerblue;  
-    color: white;
-}
+
 
 /* Card libro */
 .libro-card {
