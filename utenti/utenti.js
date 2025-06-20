@@ -198,4 +198,53 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Errore durante l\'aggiunta utente. Riprova.');
         });
     });
+
+
 });
+
+function checkSession() {
+    const datiLoginString = sessionStorage.getItem("utente");
+
+    if (!datiLoginString) {
+        alert("Sessione non trovata. Effettua il login.");
+        window.location.href = "../login/login.html";
+        return false;
+    }
+
+    const datiLogin = JSON.parse(datiLoginString);
+    const now = Date.now();
+
+    if (now > datiLogin.expiryTime) {
+        alert("Sessione scaduta. Effettua di nuovo il login.");
+        sessionStorage.clear(); 
+        window.location.href = "../login/login.html";
+        return false;
+    }
+
+    return true;
+}
+
+checkSession();
+
+const logoutBtn = document.getElementById("logoutButton");
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", function() {
+        sessionStorage.clear();
+        window.location.href = "../login/login.html";
+    });
+}
+
+function mostraRuoloUtente() {
+    const datiLoginString = sessionStorage.getItem("utente");
+    if (!datiLoginString) return;
+
+    const datiLogin = JSON.parse(datiLoginString);
+    const ruolo = datiLogin?.utente?.nomeRuolo || "Ruolo non disponibile";
+
+    const ruoloElement = document.getElementById("userRole");
+    if (ruoloElement) {
+        ruoloElement.textContent = `Ruolo: ${ruolo}`;
+    }
+}
+
+mostraRuoloUtente();

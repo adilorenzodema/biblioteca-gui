@@ -331,3 +331,18 @@ if (logoutBtn) {
         window.location.href = "../login/login.html";
     });
 }
+
+function mostraRuoloUtente() {
+    const datiLoginString = sessionStorage.getItem("utente");
+    if (!datiLoginString) return;
+
+    const datiLogin = JSON.parse(datiLoginString);
+    const ruolo = datiLogin?.utente?.nomeRuolo || "Ruolo non disponibile";
+
+    const ruoloElement = document.getElementById("userRole");
+    if (ruoloElement) {
+        ruoloElement.textContent = `Ruolo: ${ruolo}`;
+    }
+}
+
+mostraRuoloUtente();
