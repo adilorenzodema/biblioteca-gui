@@ -4,16 +4,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const errorElement = document.getElementById('error');
     const datiLoginString = sessionStorage.getItem("utente");
     const datiLogin = datiLoginString ? JSON.parse(datiLoginString) : null;
-    const ruolo = datiLogin && datiLogin.utente ? datiLogin.utente.nomeRuolo : null;  
+    const ruolo = datiLogin && datiLogin.utente ? datiLogin.utente.nomeRuolo : null;
     const areaPersonaleLink = document.getElementById('areaPersonaleLink');
-if (areaPersonaleLink && (ruolo === 'admin' || ruolo === 'operatore')) {
-    areaPersonaleLink.style.display = 'none';
-} 
-const gestioneUtentiLink = document.getElementById("gestioneUtentiLink");
+    if (areaPersonaleLink && (ruolo === 'admin' || ruolo === 'operatore')) {
+        areaPersonaleLink.style.display = 'none';
+    }
+    const gestioneUtentiLink = document.getElementById("gestioneUtentiLink");
 
-if (gestioneUtentiLink && (ruolo === "admin" || ruolo === "operatore")) {
-    gestioneUtentiLink.style.display = "list-item";
-}
+    if (gestioneUtentiLink && (ruolo === "admin" || ruolo === "operatore")) {
+        gestioneUtentiLink.style.display = "list-item";
+    }
     const apiUrl = 'http://localhost:8080/api/libri/getAllLibri';
     const apiUrlPrestito = 'http://localhost:8080/api/libri/concedi';
     const formAggiungiLibro = document.getElementById('formAggiungiLibro');
@@ -42,7 +42,7 @@ if (gestioneUtentiLink && (ruolo === "admin" || ruolo === "operatore")) {
 
                 const copertinaUrl = libro.link;
 
-                col.innerHTML = `
+                    col.innerHTML = `
     <div class="card libro-card h-100">
         <img src="${copertinaUrl}" class="card-img-top" alt="Copertina di ${libro.titolo}">
         <div class="card-body">
@@ -62,38 +62,30 @@ if (gestioneUtentiLink && (ruolo === "admin" || ruolo === "operatore")) {
                 <i class="fas fa-chevron-down"></i> Mostra dettagli
             </a>
 
-            ${ruolo === "admin" || ruolo === "operatore" ? `
-                <button class="open-modal-btn btn btn-primary mt-3" data-index="${index}">prestito</button>
+            ${(ruolo === "admin" || ruolo === "operatore") ? `
+                <button class="open-modal-btn btn btn-primary mt-3" data-index="${index}">Prestito</button>
                 <button class="btn btn-danger mt-3 btnEliminaLibro" data-idlibro="${libro.idLibro}">Rimuovi libro</button>
             ` : ''}
         </div>
     </div>
+
     <div class="modal modal-libro" data-index="${index}" style="display: none;" role="dialog" aria-modal="true" aria-hidden="true">
         <div class="modal-content">
             <button class="close-modal-btn close" aria-label="Chiudi Modale">&times;</button>
             <h2 class="mb-3">Prenota il libro: <em>${libro.titolo}</em></h2>
             <form class="form-prenotazione" data-idlibro="${libro.idLibro}">
-                <div class="mb-2">
-                    <label for="nome-${index}" class="form-label">Nome</label>
-                    <input type="text" class="form-control" id="nome-${index}" required>
-                </div>
-                <div class="mb-2">
-                    <label for="cognome-${index}" class="form-label">Cognome</label>
-                    <input type="text" class="form-control" id="cognome-${index}" required>
-                </div>
-                <div class="mb-2">
-                    <label for="classe-${index}" class="form-label">Classe</label>
-                    <input type="text" class="form-control" id="classe-${index}" required>
-                </div>
                 <div class="mb-3">
-                    <label for="cf-${index}" class="form-label">Codice Fiscale</label>
-                    <input type="text" class="form-control" id="cf-${index}" maxlength="16" required>
+                    <label for="alunno-${index}" class="form-label">Seleziona Alunno</label>
+                    <select class="form-select" id="idAlunno" name="idAlunno" required>
+                        <option value="" disabled selected>Seleziona un alunno</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-success">Conferma Prenotazione</button>
             </form>
         </div>
     </div>
 `;
+
 
                 libriContainer.appendChild(col);
             });
@@ -132,61 +124,46 @@ if (gestioneUtentiLink && (ruolo === "admin" || ruolo === "operatore")) {
                 }
             });
 
-            libriContainer.addEventListener('submit', function (e) {
-                if (e.target.classList.contains('form-prenotazione')) {
+            document.addEventListener('click', async (e) => {
+                if (e.target.classList.contains('open-modal-btn')) {
                     e.preventDefault();
 
-                    const form = e.target;
-                    const idLibro = form.getAttribute('data-idlibro');
-                    const index = form.closest('.modal-libro').getAttribute('data-index');
-                    const idUtente = sessionStorage.getItem('idUtente');
-                    if (!idUtente) {
-                        alert('Utente non autenticato! Effettua il login.');
-                        return;
-                    }
-                    const nome = form.querySelector(`#nome-${index}`).value.trim();
-                    const cognome = form.querySelector(`#cognome-${index}`).value.trim();
-                    const classe = form.querySelector(`#classe-${index}`).value.trim();
-                    const codiceFiscale = form.querySelector(`#cf-${index}`).value.trim();
+                    const index = e.target.getAttribute('data-index');
+                    const modal = document.querySelector(`.modal-libro[data-index="${index}"]`);
+                    const select = document.getElementById(`idAlunno`);
 
-                    const prenotazione = {
-                        idLibro: parseInt(idLibro),
-                        idUtente: parseInt(idUtente),
-                        nome,
-                        cognome,
-                        classe,
-                        codiceFiscale
-                    };
+                    modal.style.display = 'block';
+                    modal.setAttribute('aria-hidden', 'false');
 
-                    fetch(apiUrlPrestito, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(prenotazione)
-                    })
-                        .then(response => {
-                            if (!response.ok) throw new Error('Non è stato possibile effettuare la prenotazione');
-                            return response.text();
-                        })
-                        .then(data => {
-                            alert('Prenotazione effettuata con successo!');
-                            form.reset();
-                            form.closest('.modal-libro').style.display = 'none';
-                        })
-                        .catch(error => {
-                            console.error('Errore nella prenotazione:', error);
-                            alert('Errore durante la prenotazione. Riprova più tardi.');
+                    // Pulisce e mostra "Caricamento..."
+                    select.innerHTML = '<option value="" disabled selected>Caricamento alunni...</option>';
+
+                    try {
+                        const res = await fetch('http://localhost:8080/api/utente/getAllUtenti/alunno'); // Cambia con la tua API
+                        const alunni = await res.json();
+
+                        select.innerHTML = '<option value="" disabled selected>Seleziona un alunno</option>';
+
+                        alunni.forEach(alunno => {
+                            const option = document.createElement('option');
+                            option.value = alunno.id;
+                            option.textContent = `${alunno.nome} ${alunno.cognome}`;
+                            select.appendChild(option);
                         });
+
+                    } catch (err) {
+                        console.error("Errore nel caricamento alunni:", err);
+                        select.innerHTML = '<option value="" disabled selected>Errore nel caricamento</option>';
+                    }
+                }
+
+                // Chiusura modale
+                if (e.target.classList.contains('close-modal-btn')) {
+                    const modal = e.target.closest('.modal-libro');
+                    modal.style.display = 'none';
+                    modal.setAttribute('aria-hidden', 'true');
                 }
             });
-
-        })
-        .catch(error => {
-            loadingElement.style.display = 'none';
-            errorElement.textContent = `Si è verificato un errore: ${error.message}`;
-            errorElement.style.display = 'block';
-            console.error('Errore:', error);
         });
 
     function toggleDetails(element) {
@@ -269,7 +246,7 @@ if (gestioneUtentiLink && (ruolo === "admin" || ruolo === "operatore")) {
                         modal.style.display = 'none';
                         modal.classList.remove('show');
                     }
-                    location.reload(); 
+                    location.reload();
                 })
                 .catch(error => {
                     console.error('Errore:', error);
@@ -284,12 +261,12 @@ if (gestioneUtentiLink && (ruolo === "admin" || ruolo === "operatore")) {
 
             if (confirm("Sei sicuro di voler eliminare questo libro?")) {
                 fetch(`http://localhost:8080/api/libri/${idLibro}`, {
-                    method: 'DELETE' 
+                    method: 'DELETE'
                 })
                     .then(response => {
                         if (!response.ok) throw new Error('Errore durante l\'eliminazione del libro');
                         alert('Libro eliminato con successo!');
-                        location.reload(); 
+                        location.reload();
                     })
                     .catch(error => {
                         console.error('Errore:', error);
@@ -298,6 +275,71 @@ if (gestioneUtentiLink && (ruolo === "admin" || ruolo === "operatore")) {
             }
         }
     });
+
+   document.addEventListener('submit', function (e) {
+    if (e.target.classList.contains('form-prenotazione')) {
+        e.preventDefault();
+
+        const form = e.target;
+        const idLibro = form.getAttribute('data-idlibro');
+
+        // Trova la modale genitore
+        const modal = form.closest('.modal-libro');
+        if (!modal) {
+            alert("Errore interno: modale non trovata.");
+            return;
+        }
+        const index = modal.getAttribute('data-index');
+
+        // Seleziona la select con id corretto usando l'index
+        const selectAlunno = document.getElementById(`idAlunno`);
+
+        if (!selectAlunno) {
+            alert("Errore: campo selezione alunno non trovato.");
+            return;
+        }
+
+        const idAlunno = form.elements["idAlunno"].value;
+
+        if (!idAlunno || idAlunno === "") {
+            alert("Seleziona un alunno prima di confermare la prenotazione.");
+            return;
+        }
+
+        console.log("ID alunno selezionato:", idAlunno);
+
+        const payload = {
+            idLibro: idLibro,
+            idAlunno: idAlunno
+        };
+
+        fetch('http://localhost:8080/api/libri/concedi', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Errore durante la prenotazione');
+            return response.json();
+        })
+        .then(data => {
+            alert('Prenotazione effettuata con successo!');
+            // Chiudi modale
+            if (modal) {
+                modal.style.display = 'none';
+                modal.classList.remove('show');
+                modal.setAttribute('aria-hidden', 'true');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Errore durante la prenotazione. Riprova.');
+        });
+    }
+});
+
 });
 
 function checkSession() {
@@ -314,7 +356,7 @@ function checkSession() {
 
     if (now > datiLogin.expiryTime) {
         alert("Sessione scaduta. Effettua di nuovo il login.");
-        sessionStorage.clear(); 
+        sessionStorage.clear();
         window.location.href = "../login/login.html";
         return false;
     }
@@ -326,7 +368,7 @@ checkSession();
 
 const logoutBtn = document.getElementById("logoutButton");
 if (logoutBtn) {
-    logoutBtn.addEventListener("click", function() {
+    logoutBtn.addEventListener("click", function () {
         sessionStorage.clear();
         window.location.href = "../login/login.html";
     });
