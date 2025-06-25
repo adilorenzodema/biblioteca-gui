@@ -8,16 +8,14 @@
 </head>
 
 <body id="body">
-
 <header id="header">
     <h1>Biblioteca Scolastica</h1>
     <div id="logoutContainer" class="d-flex align-items-center gap-3 mx-3 my-2">
-          <span id="userRole" class="user-role-text">Ruolo: ...</span>
-          <button id="logoutButton" class="logout-btn">
-              <i class="fas fa-sign-out-alt"></i> Logout
-          </button>
+        <span id="userRole" class="user-role-text">Ruolo: ...</span>
+        <button id="logoutButton" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
     </div>
-    
 </header>
 
 <nav id="nav">
@@ -28,9 +26,24 @@
     </ul>
 </nav>
 
-
+<main class="main-content">
+    <div class="container">
+        <h2>Prestiti Attivi</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Alunno</th>
+                    <th>Data Scadenza Prestito</th>
+                    <th>Termina Prestito</th>
+                </tr>
+            </thead>
+            <tbody id="prestiti-body">
+                <!-- Le righe saranno popolate dinamicamente -->
+            </tbody>
+        </table>
+    </div>
+</main>
 
 <script src="visualizzaPrestiti.js"></script>
-
 </body>
 </html>

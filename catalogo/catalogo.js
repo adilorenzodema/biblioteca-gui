@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     libro.disponibilita === 0 ? "disabled" : ""
                   }>Prestito</button>
                   <button class="btn btn-danger mt-3 btnEliminaLibro" data-idlibro="${libro.idLibro}">Rimuovi libro</button>
-                  <a href="prestiti.html?libroId=${libro.idLibro}" class="btn btn-info mt-3">Visualizza Prestiti</a>
+                  <a href="../visualizzaPrestiti/visualizzaPrestiti.html?libroId=${libro.idLibro}" class="btn btn-info mt-3">Visualizza Prestiti</a>
                 `
                 : ""
             }
