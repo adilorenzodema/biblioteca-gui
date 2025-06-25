@@ -206,22 +206,30 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   if (ruolo === "admin" || ruolo === "operatore") {
-    const bottone = document.createElement("button");
-    bottone.className = "btn btn-success";
-    bottone.textContent = "Aggiungi libro";
-    bottone.addEventListener("click", function () {
-      const modal = document.getElementById("modalAggiungiLibro");
-      if (modal) {
-        modal.style.display = "flex";
-        modal.classList.add("show");
-        modal.setAttribute("aria-hidden", "false");
-      }
-    });
-
-    if (containerAggiungiLibro) {
-      containerAggiungiLibro.appendChild(bottone);
+  const bottoneAggiungi = document.createElement("button");
+  bottoneAggiungi.className = "btn btn-success me-2";
+  bottoneAggiungi.textContent = "Aggiungi libro";
+  bottoneAggiungi.addEventListener("click", function () {
+    const modal = document.getElementById("modalAggiungiLibro");
+    if (modal) {
+      modal.style.display = "flex";
+      modal.classList.add("show");
+      modal.setAttribute("aria-hidden", "false");
     }
+  });
+  const bottonePrestiti = document.createElement("button");
+  bottonePrestiti.className = "btn btn-info";
+  bottonePrestiti.textContent = "Visualizza prestiti";
+  bottonePrestiti.addEventListener("click", function () {
+    window.location.href = "../visualizzaPrestiti/visualizzaPrestiti.html";
+  });
+
+  if (containerAggiungiLibro) {
+    containerAggiungiLibro.appendChild(bottoneAggiungi);
+    containerAggiungiLibro.appendChild(bottonePrestiti);
   }
+}
+
 
   document.addEventListener("click", function (e) {
     if (
