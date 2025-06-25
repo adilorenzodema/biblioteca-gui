@@ -54,15 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <h5 class="card-title">${libro.titolo}</h5>
             <p class="card-text"><strong>Autore:</strong> ${libro.autore}</p>
             <p class="card-text"><strong>Genere:</strong> ${libro.genere}</p>
-
-            <ul class="list-group list-group-flush mt-3" style="display: none;">
-                <li class="list-group-item"><strong>Editore:</strong> ${
-                  libro.casaEditrice
-                }</li>
-                <li class="list-group-item"><strong>ISBN:</strong> ${
-                  libro.iban
-                }</li>
-                <li class="list-group-item ${
+            <p class="card-text"${
                   libro.disponibilita !== 0 ? "disponibile" : "non-disponibile"
                 }">
                     <strong>Disponibilità:</strong> ${
@@ -70,7 +62,15 @@ document.addEventListener("DOMContentLoaded", function () {
                         ? "Disponibile"
                         : "Non disponibile"
                     }
-                </li>
+                  </p>
+            <ul class="list-group list-group-flush mt-3" style="display: none;">
+                <li class="list-group-item"><strong>Editore:</strong> ${
+                  libro.casaEditrice
+                }</li>
+                <li class="list-group-item"><strong>ISBN:</strong> ${
+                  libro.iban
+                }</li>
+                
             </ul>
 
             <a href="#" class="toggle-details mt-2 d-block">
@@ -80,9 +80,11 @@ document.addEventListener("DOMContentLoaded", function () {
             ${
               ruolo === "admin" || ruolo === "operatore"
                 ? `
-                <button class="open-modal-btn btn btn-primary mt-3" data-index="${index}">Prestito</button>
-                <button class="btn btn-danger mt-3 btnEliminaLibro" data-idlibro="${libro.idLibro}">Rimuovi libro</button>
-            `
+                  <button class="open-modal-btn btn btn-primary mt-3" data-index="${index}" ${
+                    libro.disponibilita === 0 ? "disabled" : ""
+                  }>Prestito</button>
+                  <button class="btn btn-danger mt-3 btnEliminaLibro" data-idlibro="${libro.idLibro}">Rimuovi libro</button>
+                `
                 : ""
             }
         </div>
