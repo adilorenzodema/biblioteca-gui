@@ -5,19 +5,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('modalAggiungiUtente');
     const formAggiungiUtente = document.getElementById('formAggiungiUtente');
 
-    const apiUrl = 'http://localhost:8080/api/utente/getAllUtenti';
-    const deleteUrlBase = 'http://localhost:8080/api/utente';
+    const apiBaseUrl = 'http://localhost:8080/api/utente';
 
     const datiLoginString = sessionStorage.getItem("utente");
     const datiLogin = datiLoginString ? JSON.parse(datiLoginString) : null;
     const ruoloLoggato = datiLogin && datiLogin.utente ? datiLogin.utente.nomeRuolo : null;
 
-    let utentiCaricati = [];
-
-
     const ruoliFiltro = ['admin', 'operatore', 'alunno'];
 
-  
+    let utentiCaricati = [];
+
     function apriModal() {
         modal.style.display = 'flex';
     }
@@ -27,9 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
         formAggiungiUtente.reset();
     }
 
-  
     modal.querySelector('.close-modal-btn').addEventListener('click', chiudiModal);
-
 
     modal.addEventListener('click', function(e) {
         if (e.target === modal) {
@@ -37,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    
     function formatDate(data) {
         if (!data) return '-';
         const date = new Date(data);
@@ -50,65 +44,55 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
- 
-    function filtraUtenti(ruolo) {
+    function mostraUtenti(listaUtenti) {
         container.innerHTML = '';
-        let filtrati;
-        if (ruolo === 'tutti') {
-            filtrati = utentiCaricati;
-        } else {
-            filtrati = utentiCaricati.filter(u => u.nomeRuolo.toLowerCase() === ruolo.toLowerCase());
-        }
-        if (filtrati.length === 0) {
-            container.innerHTML = `<p>Nessun utente trovato per il filtro "${ruolo === 'tutti' ? 'tutti' : ruolo}"</p>`;
+        if (listaUtenti.length === 0) {
+            container.innerHTML = `<p>Nessun utente trovato</p>`;
             return;
         }
 
-        filtrati.forEach(utente => {
-    const card = document.createElement('div');
-    card.className = 'card-utente';
+        listaUtenti.forEach(utente => {
+            const card = document.createElement('div');
+            card.className = 'card-utente';
 
-    let html = `
-        <div class="card-content">
-            <h3>${utente.nome} ${utente.cognome}</h3>
-            <p><strong>Codice Fiscale:</strong> ${utente.codiceFiscale}</p>
-            <p><strong>Classe:</strong> ${utente.classe}</p>
-            <p><strong>Username:</strong> ${utente.username}</p>
-            <p><strong>Password:</strong> ${utente.password}</p>
-            <p><strong>Data Creazione:</strong> ${formatDate(utente.dataCreazione)}</p>
-            <p><strong>Data Modifica:</strong> ${formatDate(utente.dataModifica)}</p>
-            <p><strong>Attivo:</strong> ${utente.active ? 'Sì' : 'No'}</p>
-            <p><strong>ID Ruolo:</strong> ${utente.idRuolo}</p>
-            <p><strong>Nome Ruolo:</strong> ${utente.nomeRuolo}</p>
-    `;
-    if (ruoloLoggato === 'admin' && utente.nomeRuolo.toLowerCase() !== 'admin') {
-        html += `
-            <button class="btn btn-danger btn-rimuovi-utente" data-id="${utente.idUtente}">
-                Rimuovi utente
-            </button>`;
-    }
+            let html = `
+                <div class="card-content">
+                    <h3>${utente.nome} ${utente.cognome}</h3>
+                    <p><strong>Codice Fiscale:</strong> ${utente.codiceFiscale}</p>
+                    <p><strong>Classe:</strong> ${utente.classe}</p>
+                    <p><strong>Username:</strong> ${utente.username}</p>
+                    <p><strong>Password:</strong> ${utente.password}</p>
+                    <p><strong>Data Creazione:</strong> ${formatDate(utente.dataCreazione)}</p>
+                    <p><strong>Data Modifica:</strong> ${formatDate(utente.dataModifica)}</p>
+                    <p><strong>Attivo:</strong> ${utente.active ? 'Sì' : 'No'}</p>
+                    <p><strong>ID Ruolo:</strong> ${utente.idRuolo}</p>
+                    <p><strong>Nome Ruolo:</strong> ${utente.nomeRuolo}</p>
+            `;
 
-    html += `</div>`;
-    card.innerHTML = html;
+            if (ruoloLoggato === 'admin' && utente.nomeRuolo.toLowerCase() !== 'admin') {
+                html += `
+                    <button class="btn btn-danger btn-rimuovi-utente" data-id="${utente.idUtente}">
+                        Rimuovi utente
+                    </button>`;
+            }
+            html += `</div>`;
 
-    container.appendChild(card);
-});
+            card.innerHTML = html;
+            container.appendChild(card);
+        });
 
-
+        // Gestione eliminazione utenti
         document.querySelectorAll('.btn-rimuovi-utente').forEach(button => {
             button.addEventListener('click', function () {
                 const idUtente = this.getAttribute('data-id');
-
                 if (confirm('Sei sicuro di voler eliminare questo utente?')) {
-                    fetch(`${deleteUrlBase}/${idUtente}`, {
+                    fetch(`${apiBaseUrl}/${idUtente}`, {
                         method: 'DELETE'
                     })
                     .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Errore durante l\'eliminazione dell\'utente');
-                        }
+                        if (!response.ok) throw new Error('Errore durante l\'eliminazione dell\'utente');
                         alert('Utente eliminato con successo!');
-                        location.reload();
+                        caricaUtenti(); // Ricarica la lista dopo eliminazione
                     })
                     .catch(error => {
                         console.error('Errore nella cancellazione:', error);
@@ -119,26 +103,44 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-   
+    function caricaUtenti(ruolo = null) {
+        let url = `${apiBaseUrl}/getAllUtenti`;
+        if (ruolo && ruolo !== 'tutti') {
+            url += `/${ruolo}`;
+        }
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) throw new Error('Errore nel recupero degli utenti');
+                return response.json();
+            })
+            .then(utenti => {
+                utentiCaricati = utenti;
+                mostraUtenti(utentiCaricati);
+            })
+            .catch(error => {
+                console.error('Errore nel caricamento:', error);
+                container.innerHTML = `<p>Errore durante il caricamento dei dati.</p>`;
+            });
+    }
+
     function creaBottoniFiltro() {
         filtroContainer.innerHTML = '';
 
         const btnTutti = document.createElement('button');
         btnTutti.className = 'btn btn-secondary me-2 mb-2';
         btnTutti.textContent = 'Tutti';
-        btnTutti.addEventListener('click', () => filtraUtenti('tutti'));
+        btnTutti.addEventListener('click', () => caricaUtenti(null));
         filtroContainer.appendChild(btnTutti);
-
 
         ruoliFiltro.forEach(r => {
             const btn = document.createElement('button');
             btn.className = 'btn btn-primary me-2 mb-2';
             btn.textContent = r.charAt(0).toUpperCase() + r.slice(1);
-            btn.addEventListener('click', () => filtraUtenti(r));
+            btn.addEventListener('click', () => caricaUtenti(r));
             filtroContainer.appendChild(btn);
         });
     }
-
 
     function creaBottoneAggiungi() {
         const btn = document.createElement('button');
@@ -147,26 +149,6 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('click', apriModal);
         aggiungiUtenteContainer.appendChild(btn);
     }
-
-
-    fetch(apiUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Errore nel recupero degli utenti');
-            }
-            return response.json();
-        })
-        .then(utenti => {
-            utentiCaricati = utenti;
-            creaBottoniFiltro();
-            creaBottoneAggiungi();
-            filtraUtenti('tutti');
-        })
-        .catch(error => {
-            console.error('Errore nel caricamento:', error);
-            container.innerHTML = `<p>Errore durante il caricamento dei dati.</p>`;
-        });
-
 
     formAggiungiUtente.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -182,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
             nomeRuolo: formAggiungiUtente.nomeRuolo.value.trim()
         };
 
-        fetch('http://localhost:8080/api/utente/aggiungiUtente', {
+        fetch(`${apiBaseUrl}/aggiungiUtente`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(nuovoUtente)
@@ -191,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!response.ok) throw new Error('Errore nell\'aggiunta utente');
             alert('Utente aggiunto con successo!');
             chiudiModal();
-            location.reload();
+            caricaUtenti(); // Ricarica lista utenti
         })
         .catch(error => {
             console.error('Errore:', error);
@@ -199,52 +181,51 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Avvio iniziale
+    creaBottoniFiltro();
+    creaBottoneAggiungi();
+    caricaUtenti(null);
+
+    // Funzioni per sessione e logout
+    function checkSession() {
+        const datiLoginString = sessionStorage.getItem("utente");
+        if (!datiLoginString) {
+            alert("Sessione non trovata. Effettua il login.");
+            window.location.href = "../login/login.html";
+            return false;
+        }
+        const datiLogin = JSON.parse(datiLoginString);
+        const now = Date.now();
+        if (now > datiLogin.expiryTime) {
+            alert("Sessione scaduta. Effettua di nuovo il login.");
+            sessionStorage.clear();
+            window.location.href = "../login/login.html";
+            return false;
+        }
+        return true;
+    }
+
+    checkSession();
+
+    const logoutBtn = document.getElementById("logoutButton");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function() {
+            sessionStorage.clear();
+            window.location.href = "../login/login.html";
+        });
+    }
+
+    function mostraRuoloUtente() {
+        const datiLoginString = sessionStorage.getItem("utente");
+        if (!datiLoginString) return;
+        const datiLogin = JSON.parse(datiLoginString);
+        const ruolo = datiLogin?.utente?.nomeRuolo || "Ruolo non disponibile";
+        const ruoloElement = document.getElementById("userRole");
+        if (ruoloElement) {
+            ruoloElement.textContent = `Ruolo: ${ruolo}`;
+        }
+    }
+
+    mostraRuoloUtente();
 
 });
-
-function checkSession() {
-    const datiLoginString = sessionStorage.getItem("utente");
-
-    if (!datiLoginString) {
-        alert("Sessione non trovata. Effettua il login.");
-        window.location.href = "../login/login.html";
-        return false;
-    }
-
-    const datiLogin = JSON.parse(datiLoginString);
-    const now = Date.now();
-
-    if (now > datiLogin.expiryTime) {
-        alert("Sessione scaduta. Effettua di nuovo il login.");
-        sessionStorage.clear(); 
-        window.location.href = "../login/login.html";
-        return false;
-    }
-
-    return true;
-}
-
-checkSession();
-
-const logoutBtn = document.getElementById("logoutButton");
-if (logoutBtn) {
-    logoutBtn.addEventListener("click", function() {
-        sessionStorage.clear();
-        window.location.href = "../login/login.html";
-    });
-}
-
-function mostraRuoloUtente() {
-    const datiLoginString = sessionStorage.getItem("utente");
-    if (!datiLoginString) return;
-
-    const datiLogin = JSON.parse(datiLoginString);
-    const ruolo = datiLogin?.utente?.nomeRuolo || "Ruolo non disponibile";
-
-    const ruoloElement = document.getElementById("userRole");
-    if (ruoloElement) {
-        ruoloElement.textContent = `Ruolo: ${ruolo}`;
-    }
-}
-
-mostraRuoloUtente();
