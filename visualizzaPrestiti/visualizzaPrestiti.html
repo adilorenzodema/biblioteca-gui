@@ -29,6 +29,10 @@
 <main class="main-content">
     <div class="container">
         <h2>Prestiti Attivi</h2>
+
+        <div id="loading" style="display:none;">Caricamento in corso...</div>
+        <div id="error" style="display:none; color:red;"></div>
+
         <table class="table">
             <thead>
                 <tr>
@@ -37,9 +41,7 @@
                     <th>Termina Prestito</th>
                 </tr>
             </thead>
-            <tbody id="prestiti-body">
-                <!-- Le righe saranno popolate dinamicamente -->
-            </tbody>
+                <tbody id="prestiti-table-body"></tbody>
         </table>
     </div>
 </main>
