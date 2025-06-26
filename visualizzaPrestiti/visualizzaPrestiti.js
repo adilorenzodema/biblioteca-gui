@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
       // Popola la tabella
       tableBody.innerHTML = "";
       prestiti.forEach((p) => {
-        // p ha: idUtente, idLibro, nomeCognome, dataFine (Timestamp)
         const dataFineStr = p.dataFine
           ? new Date(p.dataFine).toLocaleDateString()
           : "-";
@@ -41,9 +40,34 @@ document.addEventListener("DOMContentLoaded", function () {
         row.innerHTML = `
           <td>${p.nomeCognome}</td>
           <td>${dataFineStr}</td>
-          <td><button class="btn-rimuovi" data-id="${p.idPrestito}">Rimuovi</button></td>
+          <td><button class="btn-rimuovi" data-id="${p.idPrestito}">Termina prestito</button></td>
         `;
         tableBody.appendChild(row);
+      });
+
+      document.querySelectorAll(".btn-rimuovi").forEach((button) => {
+        button.addEventListener("click", function () {
+            const idPrestito = this.getAttribute("data-id");  // prendi id prestito dal bottone
+
+            const libroId = getQueryParam("libroId"); // se scegli idlibro usa "idlibro"
+
+            let url = `http://localhost:8080/api/prestiti/terminaPrestito/${idPrestito}`;
+
+            if (libroId) {
+                url += `?libroId=${libroId}`;
+            }
+
+            fetch(url, { method: "PUT" })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Errore nella rimozione del prestito");
+                }
+                window.location.reload();
+            })
+            .catch(err => alert("Errore: " + err.message));
+        });
+
+
       });
     })
     .catch((err) => {
@@ -51,5 +75,51 @@ document.addEventListener("DOMContentLoaded", function () {
       errorEl.style.display = "block";
       errorEl.textContent = err.message;
     });
-
 });
+
+function checkSession() {
+  const datiLoginString = sessionStorage.getItem("utente");
+
+  if (!datiLoginString) {
+    alert("Sessione non trovata. Effettua il login.");
+    window.location.href = "../login/login.html";
+    return false;
+  }
+
+  const datiLogin = JSON.parse(datiLoginString);
+  const now = Date.now();
+
+  if (now > datiLogin.expiryTime) {
+    alert("Sessione scaduta. Effettua di nuovo il login.");
+    sessionStorage.clear();
+    window.location.href = "../login/login.html";
+    return false;
+  }
+
+  return true;
+}
+
+checkSession();
+
+const logoutBtn = document.getElementById("logoutButton");
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", function () {
+    sessionStorage.clear();
+    window.location.href = "../login/login.html";
+  });
+}
+
+function mostraRuoloUtente() {
+  const datiLoginString = sessionStorage.getItem("utente");
+  if (!datiLoginString) return;
+
+  const datiLogin = JSON.parse(datiLoginString);
+  const ruolo = datiLogin?.utente?.nomeRuolo || "Ruolo non disponibile";
+
+  const ruoloElement = document.getElementById("userRole");
+  if (ruoloElement) {
+    ruoloElement.textContent = `Ruolo: ${ruolo}`;
+  }
+}
+
+mostraRuoloUtente();

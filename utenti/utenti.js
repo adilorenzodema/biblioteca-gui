@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const ruoliFiltro = ['admin', 'operatore', 'alunno'];
 
     let utentiCaricati = [];
-
+    
     function apriModal() {
         modal.style.display = 'flex';
     }

@@ -10,11 +10,19 @@ document.addEventListener("DOMContentLoaded", function () {
   if (areaPersonaleLink && (ruolo === "admin" || ruolo === "operatore")) {
     areaPersonaleLink.style.display = "none";
   }
-  const gestioneUtentiLink = document.getElementById("gestioneUtentiLink");
 
+  const gestioneUtentiLink = document.getElementById("gestioneUtentiLink");
   if (gestioneUtentiLink && (ruolo === "admin" || ruolo === "operatore")) {
     gestioneUtentiLink.style.display = "list-item";
   }
+
+  const gestionePrestitiLink = document.getElementById("gestionePrestitiLink");
+  if (gestionePrestitiLink && (ruolo === "admin" || ruolo === "operatore")) {
+    gestionePrestitiLink.style.display = "list-item";
+  }
+
+ 
+  
   const apiUrl = "http://localhost:8080/api/libri/getAllLibri";
   const apiUrlPrestito = "http://localhost:8080/api/libri/concedi";
   const formAggiungiLibro = document.getElementById("formAggiungiLibro");

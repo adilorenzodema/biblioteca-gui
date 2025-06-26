@@ -15,11 +15,19 @@ document.addEventListener("DOMContentLoaded", function () {
         const navList = document.getElementById("navList");
 
         const nuovoElementoNav = document.createElement("li");
-        const link = document.createElement("a");
-        link.href = "../utenti/utenti.html";
-        link.textContent = "Gestione Utenti";
+        const linkUtenti = document.createElement("a");
+        linkUtenti.href = "../utenti/utenti.html";
+        linkUtenti.textContent = "Gestione Utenti";
 
-        nuovoElementoNav.appendChild(link);
+        nuovoElementoNav.appendChild(linkUtenti);
+        navList.appendChild(nuovoElementoNav);
+
+        const nuovoElementoNavPrestiti = document.createElement("li");
+        const linkPrestiti = document.createElement("a");
+        linkPrestiti.href = "../gestisciPrestiti/gestisciPrestiti.html";
+        linkPrestiti.textContent = "Gestione Prestiti";
+
+        nuovoElementoNav.appendChild(linkPrestiti);
         navList.appendChild(nuovoElementoNav);
     }
 

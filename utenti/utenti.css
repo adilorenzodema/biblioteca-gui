@@ -168,6 +168,10 @@
         .close-modal-btn:hover {
             color: #333;
         }
+
+        #nav ul li a.current {
+            background-color: dodgerblue;
+        }
         
         .filter-buttons {
             display: flex;
