@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const copertinaUrl = libro.link || 'https://via.placeholder.com/150x200?text=Copertina+non+disponibile';
 
                 // Calcola date prestito (qui puoi usare libro.dataInizio se lo ricevi dal backend)
-                const inizioPrestito = libro.inizioPrestito ? new Date(libro.dataInizio) : new Date(); // fallback: oggi
-                const finePrestito = new Date(inizioPrestito.getTime() + 30 * 24 * 60 * 60 * 1000);
+                const inizioPrestito = libro.dataInizio ? new Date(libro.dataInizio) : null;
+                const finePrestito = libro.dataFine ? new Date(libro.dataFine) : null;
                 const oggi = new Date();
 
                 const isScaduto = oggi > finePrestito;
@@ -61,8 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             <ul class="list-group list-group-flush mt-3">
                                 <li class="list-group-item"><strong>Editore:</strong> ${libro.casaEditrice || 'N/A'}</li>
                                 <li class="list-group-item"><strong>ISBN:</strong> ${libro.iban || 'N/A'}</li>
-                                <li class="list-group-item"><strong>Data Inizio Prestito:</strong> ${inizioPrestito.toLocaleDateString()}</li>
-                                <li class="list-group-item"><strong>Data Fine Prestito:</strong> ${finePrestito.toLocaleDateString()}</li>
+                                <li class="list-group-item"><strong>Data Inizio:</strong> ${inizioPrestito ? inizioPrestito.toLocaleDateString() : 'N/A'}</li>
+<li class="list-group-item"><strong>Data Fine:</strong> ${finePrestito ? finePrestito.toLocaleDateString() : 'N/A'}</li>
                             </ul>
 
                             ${isScaduto ? `
