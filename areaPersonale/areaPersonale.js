@@ -46,12 +46,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Mostra alert se il prestito è scaduto
                 if (isScaduto) {
-                    alert(`⚠️ Il prestito del libro "${libro.titolo}" è scaduto.\nTi invitiamo a riportarlo in biblioteca.`);
+                    alert(`⚠️ Il prestito del libro "${libro.titoloLibro}" è scaduto.\nTi invitiamo a riportarlo in biblioteca.`);
                 }
 
                 col.innerHTML = `
                     <div class="card libro-card h-100 ${isScaduto ? 'border-danger' : ''}">
-                        <img src="${copertinaUrl}" class="card-img-top" alt="Copertina di ${libro.titolo}" 
+                        <img src="${copertinaUrl}" class="card-img-top" alt="Copertina di ${libro.titoloLibo}" 
                              onerror="this.onerror=null; this.src='https://via.placeholder.com/150x200?text=Copertina+non+disponibile'">
                         <div class="card-body">
                             <h5 class="card-title">${libro.titolo}</h5>
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <li class="list-group-item"><strong>Editore:</strong> ${libro.casaEditrice || 'N/A'}</li>
                                 <li class="list-group-item"><strong>ISBN:</strong> ${libro.iban || 'N/A'}</li>
                                 <li class="list-group-item"><strong>Data Inizio:</strong> ${inizioPrestito ? inizioPrestito.toLocaleDateString() : 'N/A'}</li>
-<li class="list-group-item"><strong>Data Fine:</strong> ${finePrestito ? finePrestito.toLocaleDateString() : 'N/A'}</li>
+                                <li class="list-group-item"><strong>Data Fine:</strong> ${finePrestito ? finePrestito.toLocaleDateString() : 'N/A'}</li>
                             </ul>
 
                             ${isScaduto ? `
