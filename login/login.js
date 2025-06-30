@@ -11,20 +11,25 @@ function doLogin() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
     })
-    
     .then(response => {
         if (response.status === 200) {
-            return response.json()
+            return response.json();
         } else if (response.status === 500) {
             messaggioErrore.innerHTML = "Credenziali sbagliate";
+            throw new Error("Credenziali sbagliate"); // Stop chaining
         } else {
             messaggioErrore.innerHTML = "Errore sconosciuto";
+            throw new Error("Errore sconosciuto");
         }
-        return response.json();
     })
     .then(utenteLoggato => {
+        if (!utenteLoggato.active) {
+            messaggioErrore.innerHTML = "Il tuo account non è attivo.";
+            return; // blocca il login
+        }
+
         const loginTime = Date.now();
-        const expiryTime = loginTime + (1*60*60*1000);
+        const expiryTime = loginTime + (1 * 60 * 60 * 1000); // 1 ora
 
         const datiLogin = {
             utente: utenteLoggato,
@@ -36,13 +41,17 @@ function doLogin() {
 
         console.log("Sessione salvata:", datiLogin);
         window.location.href = "../homePage/homepage.html";
-        })
-        .catch(error => {
-            console.error("Errore nella fetch:", error);
-            alert("Errore nella comunicazione con il server");
     })
-
+    .catch(error => {
+        console.error("Errore nella fetch:", error);
+        // alert già gestito sopra se è stato uno degli errori previsti
+        // ma possiamo aggiungere fallback:
+        if (!messaggioErrore.innerHTML) {
+            alert("Errore nella comunicazione con il server");
+        }
+    });
 }
+
 function relocation(){
     window.location.href = '../registrazione/registrazione.html';
 }
