@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           try {
             const res = await fetch(
-              apigetAllAlunni
+              apigetAllAlunni(nomeRuolo)
             ); 
             const alunni = await res.json();
 
