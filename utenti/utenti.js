@@ -1,3 +1,4 @@
+import { apiBaseUtente } from '../api/api.js';
 document.addEventListener('DOMContentLoaded', function () {
     const container = document.getElementById('utenti-container');
     const filtroContainer = document.getElementById('filtro-container');
@@ -5,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('modalAggiungiUtente');
     const formAggiungiUtente = document.getElementById('formAggiungiUtente');
 
-    const apiBaseUrl = 'https://biblioteca-scolastica.onrender.com/api/utente';
+    const apiBaseUrl = apiBaseUtente;
 
     const datiLoginString = sessionStorage.getItem("utente");
     const datiLogin = datiLoginString ? JSON.parse(datiLoginString) : null;
@@ -67,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <p><strong>Attivo:</strong> ${utente.active ? 'Sì' : 'No'}</p>
                     <p><strong>ID Ruolo:</strong> ${utente.idRuolo}</p>
                     <p><strong>Nome Ruolo:</strong> ${utente.nomeRuolo}</p>
+                    <p><strong>Email:</strong> ${utente.email}</p>
             `;
 
             if (ruoloLoggato === 'admin' && utente.nomeRuolo.toLowerCase() !== 'admin') {
@@ -161,7 +163,8 @@ document.addEventListener('DOMContentLoaded', function () {
             username: formAggiungiUtente.username.value.trim(),
             password: formAggiungiUtente.password.value.trim(),
             idRuolo: parseInt(formAggiungiUtente.idRuolo.value, 10),
-            nomeRuolo: formAggiungiUtente.nomeRuolo.value.trim()
+            nomeRuolo: formAggiungiUtente.nomeRuolo.value.trim(),
+            email: formAggiungiUtente.email.value.trim()
         };
 
         fetch(`${apiBaseUrl}/aggiungiUtente`, {

@@ -1,3 +1,5 @@
+import { apiTerminaPrestito } from '../api/api.js';
+import { apiAllPrestiti }from '../api/api.js';
 document.addEventListener("DOMContentLoaded", function () {
   // Funzione per leggere parametro query string
   function getQueryParam(param) {
@@ -6,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const libroId = getQueryParam("libroId");
-  const apiUrlBase = "https://biblioteca-scolastica.onrender.com/api/prestiti/getAllPrestito";
+  const apiUrlBase = apiAllPrestiti;
   const apiUrl = libroId ? `${apiUrlBase}/${libroId}` : apiUrlBase;
 
   const tableBody = document.getElementById("prestiti-table-body");
@@ -51,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const libroId = getQueryParam("libroId"); // se scegli idlibro usa "idlibro"
 
-            let url = `https://biblioteca-scolastica.onrender.com/api/prestiti/terminaPrestito/${idPrestito}`;
+            let url = apiTerminaPrestito;
 
             if (libroId) {
                 url += `?libroId=${libroId}`;

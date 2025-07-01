@@ -1,3 +1,4 @@
+import { apiAddUtente } from '../api/api.js';
 document.addEventListener('DOMContentLoaded', () => {
     const formAggiungiUtente = document.getElementById('formAggiungiUtente');
     const messaggioErrore = document.getElementById('messaggioErrore');
@@ -56,13 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
             nomeRuolo
         };
 
-        // Disabilita il bottone durante la richiesta
+        
         const registerBtn = document.getElementById('registerBtn');
         registerBtn.disabled = true;
         registerBtn.textContent = 'Registrazione in corso...';
 
-        // Invia i dati al backend
-        fetch('https://biblioteca-scolastica.onrender.com/api/utente/aggiungiUtente', {
+        
+        fetch(apiAddUtente, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(nuovoUtente)

@@ -1,4 +1,13 @@
+import { apigetAllLibry } from '../api/api.js';
+import { apiConcediPrestito } from '../api/api.js';
+import { apiAggiungiLibro } from '../api/api.js';
 document.addEventListener("DOMContentLoaded", function () {
+  
+  //API
+  const apiUrl = apigetAllLibry;
+  const apiUrlPrestito = apiConcediPrestito;
+  const apiUrlAggiungi = apiAggiungiLibro;
+
   const libriContainer = document.getElementById("libri-container");
   const loadingElement = document.getElementById("loading");
   const errorElement = document.getElementById("error");
@@ -21,12 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     gestionePrestitiLink.style.display = "list-item";
   }
 
- 
-  
-  const apiUrl = "https://biblioteca-scolastica.onrender.com/api/libri/getAllLibri";
-  const apiUrlPrestito = "https://biblioteca-scolastica.onrender.com/api/librilibri/concedi";
   const formAggiungiLibro = document.getElementById("formAggiungiLibro");
-  const apiUrlAggiungi = "https://biblioteca-scolastica.onrender.com/api/librilibri/aggiungi";
   const containerAggiungiLibro = document.getElementById(
     "aggiungi-libro-container"
   );
@@ -174,8 +178,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
           try {
             const res = await fetch(
-              "https://biblioteca-scolastica.onrender.com/api/utente/getAllUtenti/alunno"
-            ); // Cambia con la tua API
+              apigetAllAlunni
+            ); 
             const alunni = await res.json();
 
             select.innerHTML =
@@ -320,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const idLibro = e.target.getAttribute("data-idlibro");
 
       if (confirm("Sei sicuro di voler eliminare questo libro?")) {
-        fetch(`https://biblioteca-scolastica.onrender.com/api/libri/${idLibro}`, {
+        fetch(apiDeleteLibro, {
           method: "DELETE",
         })
           .then((response) => {

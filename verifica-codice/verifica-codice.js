@@ -1,3 +1,4 @@
+ import { apiVerificaCodice } from '../api/api.js';
  document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const username = urlParams.get('username');
@@ -10,7 +11,7 @@
                 const codice = document.getElementById('codice').value;
                 
                 try {
-                    const response = await fetch('https://biblioteca-scolastica.onrender.com/api/utente/verificaCodice', {
+                    const response = await fetch(apiVerificaCodice, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',

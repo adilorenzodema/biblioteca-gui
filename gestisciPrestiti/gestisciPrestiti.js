@@ -1,3 +1,4 @@
+import { apiBasePrestito } from '../api/api.js';
 document.addEventListener("DOMContentLoaded", function () {
   const tableHead = document.getElementById("prestiti-table-head");
   const tableBody = document.getElementById("prestiti-table-body");
@@ -7,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const btnAttivi = document.getElementById("btnAttivi");
   const btnConclusi = document.getElementById("btnConclusi");
 
-  const apiBase = "https://biblioteca-scolastica.onrender.com/api/prestiti";
+  const apiBase = apiBasePrestito;
 
   function getQueryParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
@@ -86,17 +87,14 @@ document.addEventListener("DOMContentLoaded", function () {
             button.addEventListener("click", function () {
               const idPrestito = this.getAttribute("data-id");
 
-              let url = `https://biblioteca-scolastica.onrender.com/api/prestiti/terminaPrestito/${idPrestito}`;
-
-              // Se vuoi puoi passare libroId come query param, se serve
-              // if (libroId) url += `?libroId=${libroId}`;
+              let url = apiterminaPrestito;
 
               fetch(url, { method: "PUT" })
                 .then((response) => {
                   if (!response.ok) {
                     throw new Error("Errore nella terminazione del prestito");
                   }
-                  // Ricarico la lista attivi
+                  
                   caricaPrestiti("attivi");
                 })
                 .catch((err) => alert("Errore: " + err.message));

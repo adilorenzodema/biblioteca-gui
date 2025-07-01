@@ -1,12 +1,13 @@
+import { apiBaseLogin } from '../api/api.js';
+
 const messaggioErrore = document.getElementById("messaggioErrore");
 const loginBtn = document.getElementById("loginBtn");
 const registerBtn=document.getElementById("registerBtn")
-
 function doLogin() {
     const username = document.getElementById("inputEmail").value;
     const password = document.getElementById("inputPassword").value;
-
-    fetch("https://biblioteca-scolastica.onrender.com/api/login", {
+    
+    fetch(apiBaseLogin, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
@@ -55,4 +56,6 @@ function doLogin() {
 function relocation(){
     window.location.href = '../registrazione/registrazione.html';
 }
+loginBtn.addEventListener("click", doLogin);
+
 registerBtn.addEventListener("click", relocation);

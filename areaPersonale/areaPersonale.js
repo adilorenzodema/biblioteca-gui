@@ -1,3 +1,4 @@
+import { apigetMyLibry } from '../api/api.js';
 document.addEventListener('DOMContentLoaded', function () {
     const libriContainer = document.getElementById('libri-container');
     const loadingElement = document.getElementById('loading');
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    const apiUrl = `https://biblioteca-scolastica.onrender.com/api/libri/getMyLibri?idUtente=${idUtente}`;
+    const apiUrl = apigetMyLibry(idUtente);
 
     fetch(apiUrl)
         .then(response => {
@@ -51,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 col.innerHTML = `
                     <div class="card libro-card h-100 ${isScaduto ? 'border-danger' : ''}">
-                        <img src="${copertinaUrl}" class="card-img-top" alt="Copertina di ${libro.titoloLibo}" 
+                        <img src="${copertinaUrl}" class="card-img-top" alt="Copertina di ${libro.titoloLibro}" 
                              onerror="this.onerror=null; this.src='https://via.placeholder.com/150x200?text=Copertina+non+disponibile'">
                         <div class="card-body">
                             <h5 class="card-title">${libro.titoloLibro}</h5>
