@@ -10,7 +10,7 @@
                 const codice = document.getElementById('codice').value;
                 
                 try {
-                    const response = await fetch('http://localhost:8080/api/utente/verificaCodice', {
+                    const response = await fetch('https://biblioteca-scolastica.onrender.com/api/utente/verificaCodice', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',

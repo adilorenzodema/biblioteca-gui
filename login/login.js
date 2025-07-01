@@ -6,7 +6,7 @@ function doLogin() {
     const username = document.getElementById("inputEmail").value;
     const password = document.getElementById("inputPassword").value;
 
-    fetch("http://localhost:8080/api/login", {
+    fetch("https://biblioteca-scolastica.onrender.com/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })

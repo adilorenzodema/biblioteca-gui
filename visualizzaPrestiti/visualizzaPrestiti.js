@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const libroId = getQueryParam("libroId");
-  const apiUrlBase = "http://localhost:8080/api/prestiti/getAllPrestito";
+  const apiUrlBase = "https://biblioteca-scolastica.onrender.com/api/prestiti/getAllPrestito";
   const apiUrl = libroId ? `${apiUrlBase}/${libroId}` : apiUrlBase;
 
   const tableBody = document.getElementById("prestiti-table-body");
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const libroId = getQueryParam("libroId"); // se scegli idlibro usa "idlibro"
 
-            let url = `http://localhost:8080/api/prestiti/terminaPrestito/${idPrestito}`;
+            let url = `https://biblioteca-scolastica.onrender.com/api/prestiti/terminaPrestito/${idPrestito}`;
 
             if (libroId) {
                 url += `?libroId=${libroId}`;

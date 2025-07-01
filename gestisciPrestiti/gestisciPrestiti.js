@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const btnAttivi = document.getElementById("btnAttivi");
   const btnConclusi = document.getElementById("btnConclusi");
 
-  const apiBase = "http://localhost:8080/api/prestiti";
+  const apiBase = "https://biblioteca-scolastica.onrender.com/api/prestiti";
 
   function getQueryParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
             button.addEventListener("click", function () {
               const idPrestito = this.getAttribute("data-id");
 
-              let url = `http://localhost:8080/api/prestiti/terminaPrestito/${idPrestito}`;
+              let url = `https://biblioteca-scolastica.onrender.com/api/prestiti/terminaPrestito/${idPrestito}`;
 
               // Se vuoi puoi passare libroId come query param, se serve
               // if (libroId) url += `?libroId=${libroId}`;

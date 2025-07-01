@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         registerBtn.textContent = 'Registrazione in corso...';
 
         // Invia i dati al backend
-        fetch('http://localhost:8080/api/utente/aggiungiUtente', {
+        fetch('https://biblioteca-scolastica.onrender.com/api/utente/aggiungiUtente', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(nuovoUtente)

@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('modalAggiungiUtente');
     const formAggiungiUtente = document.getElementById('formAggiungiUtente');
 
-    const apiBaseUrl = 'http://localhost:8080/api/utente';
+    const apiBaseUrl = 'https://biblioteca-scolastica.onrender.com/api/utente';
 
     const datiLoginString = sessionStorage.getItem("utente");
     const datiLogin = datiLoginString ? JSON.parse(datiLoginString) : null;

@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    const apiUrl = `http://localhost:8080/api/libri/getMyLibri?idUtente=${idUtente}`;
+    const apiUrl = `https://biblioteca-scolastica.onrender.com/api/libri/getMyLibri?idUtente=${idUtente}`;
 
     fetch(apiUrl)
         .then(response => {
