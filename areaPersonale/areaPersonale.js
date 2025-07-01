@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <img src="${copertinaUrl}" class="card-img-top" alt="Copertina di ${libro.titoloLibo}" 
                              onerror="this.onerror=null; this.src='https://via.placeholder.com/150x200?text=Copertina+non+disponibile'">
                         <div class="card-body">
-                            <h5 class="card-title">${libro.titolo}</h5>
+                            <h5 class="card-title">${libro.titoloLibro}</h5>
                             <p class="card-text"><strong>Autore:</strong> ${libro.autore || 'N/A'}</p>
                             <p class="card-text"><strong>Genere:</strong> ${libro.genere || 'N/A'}</p>
 
