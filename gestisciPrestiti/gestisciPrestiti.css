@@ -1,0 +1,174 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+#header {
+    background-color: #2c3e50;
+    color: white;
+    height: 50px;
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+#header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+#logoutContainer {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-role-text {
+    font-weight: bold;
+    color: #ecf0f1;
+    background-color: #1abc9c;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#logoutButton {
+    background-color: #e74c3c;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+}
+
+#logoutButton:hover {
+    background-color: white;
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
+#nav {
+    background-color: #34495e;
+    padding: 0.5rem 0;
+}
+
+#nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+#nav ul li {
+    margin: 0 1rem;
+}
+
+#nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+#nav ul li a:hover {
+    background-color: #1abc9c;
+}
+
+#nav ul li a.current {
+    background-color: dodgerblue;
+}
+
+.main-content {
+    padding: 100px 20px 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+table.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+table.table th, table.table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table.table th {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+}
+
+table.table tbody tr:hover {
+    background-color: #f0f8ff;
+}
+
+.btn-rimuovi {
+    background-color: #e74c3c;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-rimuovi:hover {
+    background-color: white;
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.filter-buttons button {
+  flex: 1;
+  min-width: 120px;
+  max-width: 200px;
+  padding: 8px 16px;
+  border: none;
+  background-color: #ccc;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.filter-buttons button.btn-selected {
+  background-color: #007bff;
+  color: white;
+}
+table.table th,
+table.table td {
+  text-align: center;       /* orizzontale */
+  vertical-align: middle;   /* verticale */
+}
