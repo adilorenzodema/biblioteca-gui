@@ -1,7 +1,7 @@
 const urlSvil = 'http://localhost:8080/api/';
 const urlTest = 'https://biblioteca-scolastica.onrender.com/api/';
 
-const environment = 'svil'; 
+const environment = 'test'; 
 
 const baseUrl = (environment === 'svil' ? urlSvil : urlTest);
 
